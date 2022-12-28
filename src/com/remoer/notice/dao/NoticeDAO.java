@@ -6,7 +6,7 @@ import com.remoer.notice.vo.NoticeVO;
 
 public interface NoticeDAO {
 	
-	public List<NoticeVO> list() throws Exception;
+	public List<NoticeVO> list(String period) throws Exception;
 	
 	public NoticeVO view(Long no) throws Exception;
 	
@@ -14,6 +14,6 @@ public interface NoticeDAO {
 	
 	public Integer update(NoticeVO vo) throws Exception;
 	
-	public Integer delete(NoticeVO vo) throws Exception;
+	public Integer delete(Long no) throws Exception;
 	
 }
