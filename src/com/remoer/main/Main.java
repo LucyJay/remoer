@@ -3,6 +3,7 @@ package com.remoer.main;
 import com.remoer.member.controller.MemberController;
 import com.remoer.member.vo.LoginVO;
 import com.remoer.notice.controller.NoticeController;
+import com.remoer.recipe.controller.RecipeController;
 
 public class Main {
 
@@ -23,11 +24,12 @@ public class Main {
 			String[][] menus = { { "공지사항/이벤트", "레시피나눔", "식재료", "회원정보", "고객센터" }, { "주문/배송", "장바구니", "북마크" }, {} };
 			Out.menu("REMOER에 오신 것을 환영합니다", 3, "종료", menus);
 
-			switch (In.inStr("메뉴를 입력하세요 ▶ ")) {
+			switch (In.inStr("메뉴를 입력하세요")) {
 			case "1":
 				new NoticeController().execute();
 				break;
 			case "2":
+				new RecipeController().execute();
 				break;
 			case "3":
 				break;

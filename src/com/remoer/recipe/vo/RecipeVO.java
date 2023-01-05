@@ -3,7 +3,13 @@ package com.remoer.recipe.vo;
 public class RecipeVO {
 	
 	private Long no, cntStar, cntReply;
-	private String title, content, writer, write_date, update_date;
+	private String title, content, id, writer, write_date, update_date;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	private Double avrStar;
 	public Long getNo() {
 		return no;
