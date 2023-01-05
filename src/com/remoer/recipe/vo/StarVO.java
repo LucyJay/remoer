@@ -1,4 +1,4 @@
-package com.remoer.member.recipe.vo;
+package com.remoer.recipe.vo;
 
 public class StarVO {
 	

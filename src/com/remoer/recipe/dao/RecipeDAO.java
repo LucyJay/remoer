@@ -1,11 +1,11 @@
-package com.remoer.member.recipe.dao;
+package com.remoer.recipe.dao;
 
 import java.util.List;
 
-import com.remoer.member.ingredient.vo.IngredientVO;
-import com.remoer.member.recipe.vo.RecipeVO;
-import com.remoer.member.recipe.vo.ReplyVO;
-import com.remoer.member.recipe.vo.StarVO;
+import com.remoer.ingredient.vo.IngredientVO;
+import com.remoer.recipe.vo.RecipeVO;
+import com.remoer.recipe.vo.ReplyVO;
+import com.remoer.recipe.vo.StarVO;
 
 public interface RecipeDAO {
 	

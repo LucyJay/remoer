@@ -1,4 +1,4 @@
-package com.remoer.member.ingredient.vo;
+package com.remoer.ingredient.vo;
 
 public class IngredientVO {
 	

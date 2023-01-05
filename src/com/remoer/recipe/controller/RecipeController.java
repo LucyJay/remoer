@@ -1,4 +1,4 @@
-package com.remoer.member.recipe.controller;
+package com.remoer.recipe.controller;
 
 import com.remoer.main.In;
 import com.remoer.main.Main;

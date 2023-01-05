@@ -1,4 +1,4 @@
-package com.remoer.member.recipe.dao;
+package com.remoer.recipe.dao;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,10 +9,10 @@ import java.util.List;
 
 import com.remoer.dao.DAO;
 import com.remoer.dao.DB;
-import com.remoer.member.ingredient.vo.IngredientVO;
-import com.remoer.member.recipe.vo.RecipeVO;
-import com.remoer.member.recipe.vo.ReplyVO;
-import com.remoer.member.recipe.vo.StarVO;
+import com.remoer.ingredient.vo.IngredientVO;
+import com.remoer.recipe.vo.RecipeVO;
+import com.remoer.recipe.vo.ReplyVO;
+import com.remoer.recipe.vo.StarVO;
 
 public class RecipeDAOImpl extends DAO implements RecipeDAO {
 
