@@ -10,7 +10,6 @@ import com.remoer.dao.DB;
 import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.recipe.vo.RecipeVO;
 import com.remoer.recipe.vo.ReplyVO;
-import com.remoer.recipe.vo.StarVO;
 
 public class RecipeDAOImpl extends DAO implements RecipeDAO {
 
@@ -46,7 +45,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				vo.setWriter(rs.getString(3));
 				vo.setWrite_date(rs.getString(4));
 				vo.setCntStar(rs.getLong(5));
-				vo.setAvrStar(rs.getDouble(6));
+				vo.setAvgStar(rs.getDouble(6));
 				vo.setCntReply(rs.getLong(7));
 				list.add(vo);
 			}
@@ -80,7 +79,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				vo.setWriter(rs.getString(3));
 				vo.setWrite_date(rs.getString(4));
 				vo.setCntStar(rs.getLong(5));
-				vo.setAvrStar(rs.getDouble(6));
+				vo.setAvgStar(rs.getDouble(6));
 				vo.setCntReply(rs.getLong(7));
 				list.add(vo);
 			}
@@ -114,7 +113,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				vo.setWrite_date(rs.getString(5));
 				vo.setUpdate_date(rs.getString(6));
 				vo.setCntStar(rs.getLong(7));
-				vo.setAvrStar(rs.getDouble(8));
+				vo.setAvgStar(rs.getDouble(8));
 				vo.setCntReply(rs.getLong(9));
 			}
 			return vo;

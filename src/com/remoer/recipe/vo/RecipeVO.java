@@ -1,16 +1,17 @@
 package com.remoer.recipe.vo;
 
+import java.util.List;
+
+import com.remoer.ingredient.vo.IngredientVO;
+
 public class RecipeVO {
 	
 	private Long no, cntStar, cntReply;
 	private String title, content, id, writer, write_date, update_date;
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	private Double avrStar;
+	private List<IngredientVO> ingreList;
+	private List<ReplyVO> replyList;
+	private Double avgStar;
+	
 	public Long getNo() {
 		return no;
 	}
@@ -41,6 +42,12 @@ public class RecipeVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getWriter() {
 		return writer;
 	}
@@ -59,18 +66,32 @@ public class RecipeVO {
 	public void setUpdate_date(String update_date) {
 		this.update_date = update_date;
 	}
-	public Double getAvrStar() {
-		return avrStar;
+	public List<IngredientVO> getIngreList() {
+		return ingreList;
 	}
-	public void setAvrStar(Double avrStar) {
-		this.avrStar = avrStar;
+	public void setIngreList(List<IngredientVO> ingreList) {
+		this.ingreList = ingreList;
+	}
+	public List<ReplyVO> getReplyList() {
+		return replyList;
+	}
+	public void setReplyList(List<ReplyVO> replyList) {
+		this.replyList = replyList;
+	}
+	public Double getAvgStar() {
+		return avgStar;
+	}
+	public void setAvgStar(Double avgStar) {
+		this.avgStar = avgStar;
 	}
 	@Override
 	public String toString() {
 		return "RecipeVO [no=" + no + ", cntStar=" + cntStar + ", cntReply=" + cntReply + ", title=" + title
-				+ ", content=" + content + ", writer=" + writer + ", write_date=" + write_date + ", update_date="
-				+ update_date + ", avrStar=" + avrStar + "]";
+				+ ", content=" + content + ", id=" + id + ", writer=" + writer + ", write_date=" + write_date
+				+ ", update_date=" + update_date + ", ingreList=" + ingreList + ", replyList=" + replyList
+				+ ", avgStar=" + avgStar + "]";
 	}
+	
 	
 	
 

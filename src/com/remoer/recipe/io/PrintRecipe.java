@@ -20,13 +20,13 @@ public class PrintRecipe {
 			for (int i = 0; i < list.size(); i++) {
 				RecipeVO vo = list.get(i);
 				System.out.println(vo.getNo() + "(" + vo.getCntReply() + ") | " + vo.getTitle() + " | " + vo.getWriter()
-						+ " | " + vo.getWrite_date() + " | " + vo.getAvrStar() + "(" + vo.getCntStar() + ")");
+						+ " | " + vo.getWrite_date() + " | " + vo.getAvgStar() + "(" + vo.getCntStar() + ")");
 			}
 		}
 		System.out.println("=============================================");
 	}
 
-	public static void print(RecipeVO vo, List<IngredientVO> inglist, List<ReplyVO> replist) {
+	public static void print(RecipeVO vo) {
 		if (vo == null) {
 			System.out.println("\n================== 레시피나눔 ==================");
 			System.out.println("* * * * * 존재하지 않는 글번호입니다. * * * * *");
@@ -37,8 +37,8 @@ public class PrintRecipe {
 		System.out.println("----------------------------------------------");
 		System.out.println(vo.getContent());
 		System.out.print("재료 : ");
-		if (inglist != null) {
-			for (IngredientVO ivo : inglist) {
+		if (vo.getIngreList() != null && vo.getIngreList().size() > 0) {
+			for (IngredientVO ivo : vo.getIngreList()) {
 				System.out.print("[" + ivo.getName() + "] ");
 			}
 			System.out.println();
@@ -46,12 +46,12 @@ public class PrintRecipe {
 		System.out.println();
 		System.out.println("----------------------------------------------");
 		System.out.println("Recipe by " + vo.getWriter());
-		System.out.println("별점 " + vo.getAvrStar() + " (" + vo.getCntStar() + "명 참여)");
+		System.out.println("별점 " + vo.getAvgStar() + " (" + vo.getCntStar() + "명 참여)");
 		System.out.println("----------------------------------------------");
 		System.out.println("댓글 " + vo.getCntReply() + "개");
 		System.out.println("----------------------------------------------");
-		if (replist != null) {
-			for (ReplyVO reply : replist) {
+		if (vo.getReplyList() != null != vo.getReplyList().size() > 0) {
+			for (ReplyVO reply : vo.getReplyList()) {
 				System.out.println(
 						"[댓글]" + reply.getWriter() + " | " + reply.getContent() + " - " + reply.getWrite_date());
 			}

@@ -44,7 +44,7 @@ public class RecipeController {
 					List<IngredientVO> viewTag = (List<IngredientVO>) Execute.run(new RecipeViewTagServiceImpl(),
 							viewNo);
 					List<ReplyVO> viewRep = (List<ReplyVO>) Execute.run(new RecipeViewReplyServiceImpl(), viewNo);
-					PrintRecipe.print(viewVO, viewTag, viewRep);
+					PrintRecipe.print(viewVO);
 					break;
 				case "0":
 					Out.sysln("이전 메뉴로 돌아갑니다.");
@@ -82,6 +82,8 @@ public class RecipeController {
 					}
 				case "6":
 					if (Main.login != null) {
+						Out.titleMini("레시피 수정", 30);
+						
 						break;
 					}
 				case "7":
