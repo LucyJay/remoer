@@ -31,6 +31,7 @@ public class PrintRecipe {
 			System.out.println("\n================== 레시피나눔 ==================");
 			System.out.println("* * * * * 존재하지 않는 글번호입니다. * * * * *");
 			System.out.println("=============================================");
+			return;
 		}
 		System.out.println("\n================== 레시피나눔 ==================");
 		System.out.println(vo.getNo() + " | " + vo.getTitle() + "\t\t작성일 : " + vo.getWrite_date());
@@ -50,7 +51,7 @@ public class PrintRecipe {
 		System.out.println("----------------------------------------------");
 		System.out.println("댓글 " + vo.getCntReply() + "개");
 		System.out.println("----------------------------------------------");
-		if (vo.getReplyList() != null != vo.getReplyList().size() > 0) {
+		if (vo.getReplyList() != null && vo.getReplyList().size() > 0) {
 			for (ReplyVO reply : vo.getReplyList()) {
 				System.out.println(
 						"[댓글]" + reply.getWriter() + " | " + reply.getContent() + " - " + reply.getWrite_date());

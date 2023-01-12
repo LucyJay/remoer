@@ -3,7 +3,6 @@ package com.remoer.recipe.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.main.Check;
 import com.remoer.main.Execute;
 import com.remoer.main.In;
@@ -12,12 +11,9 @@ import com.remoer.main.Out;
 import com.remoer.recipe.io.PrintRecipe;
 import com.remoer.recipe.service.RecipeListServiceImpl;
 import com.remoer.recipe.service.RecipeMyListServiceImpl;
-import com.remoer.recipe.service.RecipeViewReplyServiceImpl;
 import com.remoer.recipe.service.RecipeViewServiceImpl;
-import com.remoer.recipe.service.RecipeViewTagServiceImpl;
 import com.remoer.recipe.service.RecipeWriteServiceImpl;
 import com.remoer.recipe.vo.RecipeVO;
-import com.remoer.recipe.vo.ReplyVO;
 
 public class RecipeController {
 
@@ -41,9 +37,6 @@ public class RecipeController {
 				case "3":
 					Long viewNo = In.inLong("확인할 글번호");
 					RecipeVO viewVO = (RecipeVO) Execute.run(new RecipeViewServiceImpl(), viewNo);
-					List<IngredientVO> viewTag = (List<IngredientVO>) Execute.run(new RecipeViewTagServiceImpl(),
-							viewNo);
-					List<ReplyVO> viewRep = (List<ReplyVO>) Execute.run(new RecipeViewReplyServiceImpl(), viewNo);
 					PrintRecipe.print(viewVO);
 					break;
 				case "0":
@@ -77,7 +70,9 @@ public class RecipeController {
 					}
 				case "5":
 					if (Main.login != null) {
+						
 						PrintRecipe.print((List<RecipeVO>) Execute.run(new RecipeMyListServiceImpl(), Main.login.getId()));
+						
 						break;
 					}
 				case "6":

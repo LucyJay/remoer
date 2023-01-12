@@ -96,6 +96,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 	public RecipeVO view(Long no) throws Exception {
 		RecipeVO vo = null;
 		try {
+			//recipeVO 일반 데이터
 			con = DB.getConnection();
 			String sql = "SELECT r.no, r.title, r.content,  m.nickname, to_char(r.write_date, 'yyyy-mm-dd') write_date, to_char(r.update_date, 'yyyy-mm-dd') update_date, "
 					+ " (SELECT count(star) FROM star WHERE star.recipe = r.no GROUP BY recipe) scnt, (SELECT avg(star) FROM star WHERE star.recipe = r.no GROUP BY recipe) savg, "
@@ -116,6 +117,36 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				vo.setAvgStar(rs.getDouble(8));
 				vo.setCntReply(rs.getLong(9));
 			}
+			//식재료 태그 관련 데이터
+			sql = "SELECT i.no, i.name FROM ingredient i, rec_ingr ri WHERE ri.rec_no = ? AND ri.ingr_no = i.no ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				if (vo.getIngreList() == null)
+					vo.setIngreList(new ArrayList<>());
+				IngredientVO ingVO = new IngredientVO();
+				ingVO.setNo(rs.getLong(1));
+				ingVO.setName(rs.getString(2));
+				vo.getIngreList().add(ingVO);
+			}
+			
+			//댓글 데이터
+			sql = "SELECT r.content, m.nickname, to_char(r.write_date, 'yyyy-mm-dd hh:mi:ss') write_date "
+					+ " FROM reply r, member m WHERE r.recipe = ? AND r.writer = m.id ORDER BY r.no";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				if (vo.getReplyList() == null)
+					vo.setReplyList(new ArrayList<>());
+				ReplyVO repVO = new ReplyVO();
+				repVO.setContent(rs.getString(1));
+				repVO.setWriter(rs.getString(2));
+				repVO.setWrite_date(rs.getString(3));
+				vo.getReplyList().add(repVO);
+			}
+			
 			return vo;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,59 +156,6 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 		}
 	}
 
-	@Override
-	public List<IngredientVO> viewTag(Long no) throws Exception {
-		List<IngredientVO> list = null;
-		try {
-			con = DB.getConnection();
-			String sql = "SELECT i.no, i.name FROM ingredient i, rec_ingr ri WHERE ri.rec_no = ? ";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setLong(1, no);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				if (list == null)
-					list = new ArrayList<>();
-				IngredientVO vo = new IngredientVO();
-				vo.setNo(rs.getLong(1));
-				vo.setName(rs.getString(2));
-				list.add(vo);
-			}
-			return list;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			close();
-		}
-	}
-
-	@Override
-	public List<ReplyVO> viewReply(Long no) throws Exception {
-		List<ReplyVO> list = null;
-		try {
-			con = DB.getConnection();
-			String sql = "SELECT r.content, m.nickname, to_char(r.write_date, 'yyyy-mm-dd hh:mi:ss') write_date "
-					+ " FROM reply r, member m WHERE r.recipe = ? AND r.writer = m.id ORDER BY r.no";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setLong(1, no);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				if (list == null)
-					list = new ArrayList<>();
-				ReplyVO vo = new ReplyVO();
-				vo.setContent(rs.getString(1));
-				vo.setWriter(rs.getString(2));
-				vo.setWrite_date(rs.getString(3));
-				list.add(vo);
-			}
-			return list;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			close();
-		}
-	}
 
 	@Override
 	public Integer write(RecipeVO rec) throws Exception {

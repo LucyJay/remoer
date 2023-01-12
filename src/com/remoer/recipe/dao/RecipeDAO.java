@@ -2,10 +2,7 @@ package com.remoer.recipe.dao;
 
 import java.util.List;
 
-import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.recipe.vo.RecipeVO;
-import com.remoer.recipe.vo.ReplyVO;
-import com.remoer.recipe.vo.StarVO;
 
 public interface RecipeDAO {
 	
@@ -16,8 +13,7 @@ public interface RecipeDAO {
 	
 //	//글보기
 	public RecipeVO view(Long no) throws Exception;
-	public List<IngredientVO> viewTag(Long no) throws Exception;
-	public List<ReplyVO> viewReply(Long no) throws Exception;
+
 //	
 //	//글쓰기
 	public Integer write(RecipeVO rec) throws Exception;
