@@ -53,17 +53,22 @@ public class Out {
 	}
 
 	public static void menu(String ttl, int num, String zero, String[][] menus) {
+		title("레시피로 모인 사람들 REMOER");
+		titleMini(ttl, 36);
+		if (Main.login != null)
+			System.out.println("[" + Main.login.getGrade_name() + "] " + Main.login.getName() + "(" + Main.login.getId()
+					+ ")님 반갑습니다.");
+		menuNum(zero, num, menus);
+		lineln("=", 48);
+	}
+	
+	public static void menuNum(String zero, int num, String[][] menus) {
 		List<String> menuList = new ArrayList<>(Arrays.asList(menus[0]));
 		if (Main.login != null) {
 			menuList.addAll(Arrays.asList(menus[1]));
 			if (Main.isAdmin())
 				menuList.addAll(Arrays.asList(menus[2]));
 		}
-		title("레시피로 모인 사람들 REMOER");
-		titleMini(ttl, 36);
-		if (Main.login != null)
-			System.out.println("[" + Main.login.getGrade_name() + "] " + Main.login.getName() + "(" + Main.login.getId()
-					+ ")님 반갑습니다.");
 		for (int i = 0, j = 1; i <= menuList.size(); i++) {
 			if (i == menuList.size()) {
 				System.out.println(" 0. " + zero);
@@ -73,7 +78,6 @@ public class Out {
 					System.out.println();
 			}
 		}
-		lineln("=", 48);
 	}
 
 }

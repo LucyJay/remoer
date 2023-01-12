@@ -3,6 +3,8 @@ package com.remoer.recipe.dao;
 import java.util.List;
 
 import com.remoer.recipe.vo.RecipeVO;
+import com.remoer.recipe.vo.ReplyVO;
+import com.remoer.recipe.vo.StarVO;
 
 public interface RecipeDAO {
 	
@@ -24,13 +26,14 @@ public interface RecipeDAO {
 	public Integer writeI_R(Long in, Long rn) throws Exception;
 	
 //	//별점 등록, 취소
-//	public Integer star(StarVO vo) throws Exception;
-//	public Integer deStar(StarVO vo) throws Exception;
+	public Integer star(StarVO vo) throws Exception;
+	public Integer deStar(StarVO vo) throws Exception;
 //	
 //	//댓글 등록, 수정, 삭제
-//	public Integer reply(ReplyVO vo) throws Exception;
-//	public Integer updatereply(ReplyVO vo) throws Exception;
-//	public Integer deleteReply(Long no) throws Exception;
+	public Integer reply(ReplyVO vo) throws Exception;
+	public boolean checkWriter(ReplyVO vo) throws Exception;
+	public Integer updateReply(ReplyVO vo) throws Exception;
+	public Integer deleteReply(Long no) throws Exception;
 	
 	
 	

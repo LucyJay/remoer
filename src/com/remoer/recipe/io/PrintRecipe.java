@@ -54,7 +54,7 @@ public class PrintRecipe {
 		if (vo.getReplyList() != null && vo.getReplyList().size() > 0) {
 			for (ReplyVO reply : vo.getReplyList()) {
 				System.out.println(
-						"[댓글]" + reply.getWriter() + " | " + reply.getContent() + " - " + reply.getWrite_date());
+						"[댓글"+reply.getNo()+"]" + reply.getWriter() + " | " + reply.getContent() + " - " + reply.getWrite_date());
 			}
 		}
 		System.out.println("=============================================");

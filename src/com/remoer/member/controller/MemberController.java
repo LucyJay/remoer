@@ -22,13 +22,13 @@ public class MemberController {
 					String[][] menus = { { "로그인", "회원가입", "아이디 찾기", "비밀번호 찾기" }, {}, {} };
 					Out.menu("회원정보", 2, "이전 메뉴", menus);
 
-					menu: switch (In.inStr("메뉴를 입력하세요")) {
+					menu: switch (In.getStr("메뉴를 입력하세요")) {
 
 					case "1":
 						LoginVO login = new LoginVO();
 						Out.lnTitleMini("로그인", 30);
-						login.setId(In.inStr("아이디"));
-						login.setPw(In.inStr("비밀번호"));
+						login.setId(In.getStr("아이디"));
+						login.setPw(In.getStr("비밀번호"));
 						login = (LoginVO) Execute.run(new MemberLoginServiceImpl(), login);
 						if (login == null)
 							Out.sysln("로그인에 실패했습니다. 아이디와 비밀번호를 확인해 주세요.");
@@ -41,18 +41,18 @@ public class MemberController {
 						Out.lnTitleMini("회원가입", 30);
 						LoginVO joinVO = new LoginVO();
 						while (true) {
-							String id = In.inStr("아이디");
+							String id = In.getStr("아이디");
 							if ((boolean) Execute.run(new MemberCheckIdServiceImpl(), id)) {
 								joinVO.setId(id);
 								break;
 							}
 							Out.sys("중복되는 아이디가 존재합니다. 다른 아이디를 입력해 주세요.");
 						}
-						joinVO.setPw(In.inStr("비밀번호"));
-						joinVO.setName(In.inStr("이름"));
+						joinVO.setPw(In.getStr("비밀번호"));
+						joinVO.setName(In.getStr("이름"));
 						while (true) {
 							try {
-								String birth = In.inStr("생년월일(yyyy-mm-dd) : ");
+								String birth = In.getStr("생년월일(yyyy-mm-dd) : ");
 								new SimpleDateFormat("yyyy-mm-dd").parse(birth);
 								joinVO.setBirth(birth);
 								break;
@@ -60,19 +60,19 @@ public class MemberController {
 								Out.sys("형식에 맞게 다시 입력하세요.");
 							}
 						}
-						joinVO.setAddress(In.inStr("주소"));
+						joinVO.setAddress(In.getStr("주소"));
 						while (true) {
-							String tel = In.inStr("전화번호(000-0000-0000)");
+							String tel = In.getStr("전화번호(000-0000-0000)");
 							if (tel.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
 								joinVO.setTel(tel);
 								break;
 							} else
 								Out.sys("형식에 맞게 다시 입력하세요.");
 						}
-						joinVO.setEmail(In.inStr("이메일"));
+						joinVO.setEmail(In.getStr("이메일"));
 						Out.sys("입력하신 정보로 회원가입을 진행하시겠습니까? (y / n)");
 						while (true) {
-							String join = In.inStr("");
+							String join = In.getStr("");
 							if (join.equals("y"))
 								break;
 							else if (join.equals("n")) {
@@ -90,9 +90,9 @@ public class MemberController {
 					case "3":
 						Out.lnTitleMini("아이디 찾기", 30);
 						LoginVO findVO = new LoginVO();
-						findVO.setName(In.inStr("이름"));
+						findVO.setName(In.getStr("이름"));
 						while (true) {
-							String tel = In.inStr("전화번호(000-0000-0000)");
+							String tel = In.getStr("전화번호(000-0000-0000)");
 							if (tel.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
 								findVO.setTel(tel);
 								break;
@@ -108,10 +108,10 @@ public class MemberController {
 					case "4":
 						Out.lnTitleMini("비밀번호 찾기", 30);
 						LoginVO pwVO = new LoginVO();
-						pwVO.setId(In.inStr("아이디"));
-						pwVO.setName(In.inStr("이름"));
+						pwVO.setId(In.getStr("아이디"));
+						pwVO.setName(In.getStr("이름"));
 						while (true) {
-							String tel = In.inStr("전화번호(000-0000-0000)");
+							String tel = In.getStr("전화번호(000-0000-0000)");
 							if (tel.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
 								pwVO.setTel(tel);
 								break;
@@ -119,7 +119,7 @@ public class MemberController {
 								Out.sys("형식에 맞게 다시 입력하세요.");
 						}
 						Out.sys("비밀번호를 변경합니다. 새로운 비밀번호를 입력해 주세요.");
-						pwVO.setPw(In.inStr(""));
+						pwVO.setPw(In.getStr(""));
 						if ((Integer) Execute.run(new MemberUpdatePwServiceImpl(), pwVO) == 1) {
 							Out.sysln("비밀번호가 변경되었습니다. 변경된 비밀번호로 로그인해 주세요.");
 						} else {
@@ -139,7 +139,7 @@ public class MemberController {
 							{ "회원리스트", "회원정보 보기", "회원정보 수정", "회원삭제" } };
 					Out.menu("회원정보", 4, "이전 메뉴", menus);
 
-					switch (In.inStr("메뉴를 입력하세요")) {
+					switch (In.getStr("메뉴를 입력하세요")) {
 					case "1":
 						Main.login = null;
 						break;

@@ -10,6 +10,7 @@ import com.remoer.dao.DB;
 import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.recipe.vo.RecipeVO;
 import com.remoer.recipe.vo.ReplyVO;
+import com.remoer.recipe.vo.StarVO;
 
 public class RecipeDAOImpl extends DAO implements RecipeDAO {
 
@@ -265,79 +266,107 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 		}
 	}
 
-//	@Override
-//	public Integer star(StarVO vo) throws Exception {
-//		try {
-//			con = DB.getConnection();
-//			String sql = "";
-//			pstmt = con.prepareStatement(sql);
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			close();
-//		}
-//	}
-//
-//	@Override
-//	public Integer deStar(StarVO vo) throws Exception {
-//		try {
-//			con = DB.getConnection();
-//			String sql = "";
-//			pstmt = con.prepareStatement(sql);
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			close();
-//		}
-//	}
-//
-//	@Override
-//	public Integer reply(ReplyVO vo) throws Exception {
-//		try {
-//			con = DB.getConnection();
-//			String sql = "";
-//			pstmt = con.prepareStatement(sql);
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			close();
-//		}
-//	}
-//
-//	@Override
-//	public Integer updatereply(ReplyVO vo) throws Exception {
-//		try {
-//			con = DB.getConnection();
-//			String sql = "";
-//			pstmt = con.prepareStatement(sql);
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			close();
-//		}
-//	}
-//
-//	@Override
-//	public Integer deleteReply(Long no) throws Exception {
-//		try {
-//			con = DB.getConnection();
-//			String sql = "";
-//			pstmt = con.prepareStatement(sql);
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			close();
-//		}
-//	}
+	@Override
+	public Integer star(StarVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "INSERT INTO star VALUES(?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, vo.getStar());
+			pstmt.setString(2, vo.getId());
+			pstmt.setLong(3, vo.getRecipe());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			return 0;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer deStar(StarVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "DELETE FROM star WHERE id = ? AND recipe = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getId());
+			pstmt.setLong(2, vo.getRecipe());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer reply(ReplyVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "INSERT INTO reply (no, recipe, content, writer) VALUES (reply_seq.nextval, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, vo.getRecipeNo());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setString(3, vo.getWriter());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public boolean checkWriter(ReplyVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "SELECT no FROM reply WHERE writer = ? AND no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getWriter());
+			pstmt.setLong(2, vo.getNo());
+			rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+	
+	@Override
+	public Integer updateReply(ReplyVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "UPDATE reply SET content = ? WHERE no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getContent());
+			pstmt.setLong(2, vo.getNo());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer deleteReply(Long no) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "DELETE FROM reply WHERE no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
 
 }
