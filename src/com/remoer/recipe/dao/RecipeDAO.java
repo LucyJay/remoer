@@ -35,8 +35,12 @@ public interface RecipeDAO {
 	public Integer updateReply(ReplyVO vo) throws Exception;
 	public Integer deleteReply(Long no) throws Exception;
 	
-	
-	
+	//글 수정
+	public boolean checkWriter(RecipeVO vo) throws Exception;
+	public Integer deleteI_R(Long rn) throws Exception;
+	public Integer update(RecipeVO vo) throws Exception;
+	//글 삭제
+	public Integer delete(Long no) throws Exception;
 	
 	
 

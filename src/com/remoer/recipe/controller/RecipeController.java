@@ -3,6 +3,7 @@ package com.remoer.recipe.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.main.Check;
 import com.remoer.main.Execute;
 import com.remoer.main.In;
@@ -10,11 +11,14 @@ import com.remoer.main.Main;
 import com.remoer.main.Out;
 import com.remoer.recipe.io.PrintRecipe;
 import com.remoer.recipe.service.RecipeCheckReplyWriterServiceImpl;
+import com.remoer.recipe.service.RecipeCheckWriterServiceImpl;
+import com.remoer.recipe.service.RecipeDeleteServiceImpl;
 import com.remoer.recipe.service.RecipeDestarServiceImpl;
 import com.remoer.recipe.service.RecipeListServiceImpl;
 import com.remoer.recipe.service.RecipeMyListServiceImpl;
 import com.remoer.recipe.service.RecipeStarServiceImpl;
 import com.remoer.recipe.service.RecipeUpdateReplyServiceImpl;
+import com.remoer.recipe.service.RecipeUpdateServiceImpl;
 import com.remoer.recipe.service.RecipeViewServiceImpl;
 import com.remoer.recipe.service.RecipeWriteServiceImpl;
 import com.remoer.recipe.vo.RecipeVO;
@@ -63,7 +67,7 @@ public class RecipeController {
 								newStar.setStar(star);
 								newStar.setId(Main.login.getId());
 								newStar.setRecipe(viewNo);
-								if((Integer)Execute.run(new RecipeStarServiceImpl(), newStar) == 1) {
+								if ((Integer) Execute.run(new RecipeStarServiceImpl(), newStar) == 1) {
 									Out.sysln("별점이 등록되었습니다.");
 								} else {
 									Out.sys("별점은 한 레시피에 아이디당 한 번만 등록할 수 있습니다.");
@@ -74,7 +78,7 @@ public class RecipeController {
 								StarVO deStar = new StarVO();
 								deStar.setId(Main.login.getId());
 								deStar.setRecipe(viewNo);
-								if((Integer)Execute.run(new RecipeDestarServiceImpl(), deStar) == 1) {
+								if ((Integer) Execute.run(new RecipeDestarServiceImpl(), deStar) == 1) {
 									Out.sysln("별점이 취소되었습니다.");
 								} else {
 									Out.sysln("해당 레시피에 별점을 등록한 적이 없습니다.");
@@ -86,14 +90,15 @@ public class RecipeController {
 								while (true) {
 									Out.sys("댓글을 입력하세요.");
 									newReplyContent = In.getStr("");
-									if (newReplyContent.length()!=0)
+									if (newReplyContent.length() != 0)
 										break;
-									else Out.sys("내용을 입력해 주세요.");
+									else
+										Out.sys("내용을 입력해 주세요.");
 								}
 								newReply.setContent(newReplyContent);
 								newReply.setWriter(Main.login.getId());
 								newReply.setRecipeNo(viewNo);
-								if((Integer)Execute.run(new RecipeStarServiceImpl(), newReply) == 1) {
+								if ((Integer) Execute.run(new RecipeStarServiceImpl(), newReply) == 1) {
 									Out.sysln("댓글이 등록되었습니다.");
 								} else {
 									Out.sysln("댓글이 정상적으로 등록되지 않았습니다. 다시 시도해 주세요.");
@@ -102,9 +107,10 @@ public class RecipeController {
 							case "4":
 								ReplyVO updateReply = new ReplyVO();
 								updateReply.setNo(In.getLong("수정할 댓글번호"));
-								if((boolean)Execute.run(new RecipeCheckReplyWriterServiceImpl(), updateReply.getNo())) {
+								updateReply.setWriter(Main.login.getId());
+								if ((boolean) Execute.run(new RecipeCheckReplyWriterServiceImpl(), updateReply)) {
 									updateReply.setContent(In.getStr("수정할 내용"));
-									if((Integer)Execute.run(new RecipeUpdateReplyServiceImpl(), updateReply) == 1) {
+									if ((Integer) Execute.run(new RecipeUpdateReplyServiceImpl(), updateReply) == 1) {
 										Out.sysln("댓글이 수정되었습니다.");
 									} else {
 										Out.sysln("댓글이 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
@@ -115,8 +121,8 @@ public class RecipeController {
 								break view;
 							case "5":
 								Long delRepNo = In.getLong("삭제할 댓글번호");
-								if((boolean)Execute.run(new RecipeCheckReplyWriterServiceImpl(), delRepNo)) {
-									if((Integer)Execute.run(new RecipeUpdateReplyServiceImpl(), delRepNo) == 1) {
+								if ((boolean) Execute.run(new RecipeCheckReplyWriterServiceImpl(), delRepNo)) {
+									if ((Integer) Execute.run(new RecipeUpdateReplyServiceImpl(), delRepNo) == 1) {
 										Out.sysln("댓글이 삭제되었습니다.");
 									} else {
 										Out.sysln("댓글이 정상적으로 삭제되지 않았습니다. 다시 시도해 주세요.");
@@ -173,12 +179,77 @@ public class RecipeController {
 				case "6":
 					if (Main.login != null) {
 						Out.titleMini("레시피 수정", 30);
+						RecipeVO updateRecipe = new RecipeVO();
+						Long updateNo = In.getLong("수정할 글번호");
+						updateRecipe.setNo(updateNo);
+						updateRecipe.setId(Main.login.getId());
+						if ((boolean) Execute.run(new RecipeCheckWriterServiceImpl(), updateRecipe)) {
+							updateRecipe = (RecipeVO) Execute.run(new RecipeViewServiceImpl(), updateNo);
+							PrintRecipe.print(updateRecipe);
+							update: while (true) {
+								boolean updateIng = false;
+								Out.sys("수정할 항목을 선택하세요.");
+								Out.sys("1. 제목  2. 내용  3. 식재료  9. 취소  0. 수정완료");
+								switch (In.getStr("")) {
+								case "1":
+									updateRecipe.setTitle(In.getStr("제목"));
+									break update;
+								case "2":
+									updateRecipe.setContent(In.getStr("내용"));
+									break update;
+								case "3":
+									updateIng = true;
+									Out.sys("사용된 식재료를 모두 태그해 주세요. 모두 입력한 후 0을 입력해 주세요.");
+									while (true) {
+										String updateTag = In.getStr("");
+										if (updateTag.equals("0")) {
+											break;
+										} else if (!Check.isAllKor(updateTag)) {
+											Out.sys("한글로만 입력 가능합니다.");
+										} else {
+											IngredientVO updIng = new IngredientVO();
+											updIng.setName(updateTag);
+											updateRecipe.getIngreList().add(updIng);
+										}
+									}
+								case "9":
+									Out.sysln("수정을 취소하고 이전으로 돌아갑니다.");
+									break update;
+								case "0":
+									if ((Integer) Execute.run(new RecipeUpdateServiceImpl(),
+											new Object[] { updateRecipe, updateIng }) == 1) {
+										Out.sysln("레시피가 정상적으로 수정되었습니다.");
+									} else
+										Out.sysln("레시피가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+									break update;
+								default:
+									Out.sys("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
+								}
+							}
 
+						} else {
+							Out.sysln("본인이 작성한 댓글만 수정할 수 있습니다.");
+						}
 						break;
 					}
 				case "7":
 					if (Main.login != null) {
-						break;
+						Out.titleMini("레시피 삭제", 30);
+						Long deleteNo = In.getLong("삭제할 글번호");
+						RecipeVO deleteVO = (RecipeVO) Execute.run(new RecipeViewServiceImpl(), deleteNo);
+						if (deleteVO == null) {
+							Out.sysln("존재하지 않는 글번호입니다.");
+							break;
+						} else if (!(deleteVO.getId().equals(Main.login.getId()))) {
+							Out.sysln("본인이 작성한 레시피만 삭제할 수 있습니다.");
+							break;
+						} else {
+							if ((Integer) Execute.run(new RecipeDeleteServiceImpl(), deleteNo) == 1) {
+								Out.sysln("레시피가 정상적으로 삭제되었습니다.");
+							} else
+								Out.sysln("레시피가 정상적으로 삭제되지 않았습니다. 다시 시도해 주세요.");
+							break;
+						}
 					}
 				default:
 					Out.sysln("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");

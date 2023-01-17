@@ -369,4 +369,72 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 		}
 	}
 
+	@Override
+	public boolean checkWriter(RecipeVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "SELECT no FROM recipe WHERE writer = ? AND no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getId());
+			pstmt.setLong(2, vo.getNo());
+			rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+	
+	@Override
+	public Integer deleteI_R(Long rn) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "DELETE FROM rec_ingr WHERE rec_no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, rn);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer update(RecipeVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "UPDATE recipe SET title = ?, content = ?, update_date = sysdate WHERE no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setLong(3, vo.getNo());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer delete(Long no) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "DELETE FROM recipe WHERE no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
 }
