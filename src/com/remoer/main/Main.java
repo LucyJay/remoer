@@ -1,5 +1,6 @@
 package com.remoer.main;
 
+import com.remoer.ingredient.controller.IngredientController;
 import com.remoer.member.controller.MemberController;
 import com.remoer.member.vo.LoginVO;
 import com.remoer.notice.controller.NoticeController;
@@ -21,7 +22,7 @@ public class Main {
 			System.exit(1);
 		}
 		while (true) {
-			String[][] menus = { { "공지사항/이벤트", "레시피나눔", "식재료", "회원정보", "고객센터" }, { "주문/배송", "장바구니", "북마크" }, {} };
+			String[][] menus = { { "공지사항/이벤트", "레시피나눔", "식재료마켓", "회원정보", "고객센터" }, { "주문/배송", "장바구니", "북마크" }, {} };
 			Out.menu("REMOER에 오신 것을 환영합니다", 3, "종료", menus);
 
 			switch (In.getStr("메뉴를 입력하세요")) {
@@ -32,6 +33,7 @@ public class Main {
 				new RecipeController().execute();
 				break;
 			case "3":
+				new IngredientController().execute();
 				break;
 			case "4":
 				new MemberController().execute();
