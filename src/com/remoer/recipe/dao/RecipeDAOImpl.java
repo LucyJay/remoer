@@ -177,23 +177,6 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 		}
 	}
 
-	@Override
-	public boolean checkIng(String name) throws Exception {
-		try {
-			con = DB.getConnection();
-			String sql = "SELECT no FROM ingredient WHERE name = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, name);
-			rs = pstmt.executeQuery();
-			return rs.next();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			close();
-		}
-	}
 
 	@Override
 	public Integer writeIng(String name) throws Exception {

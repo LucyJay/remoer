@@ -19,7 +19,6 @@ public interface RecipeDAO {
 //	
 //	//글쓰기
 	public Integer write(RecipeVO rec) throws Exception;
-	public boolean checkIng(String name) throws Exception;
 	public Integer writeIng(String name) throws Exception;
 	public Long findRecNo() throws Exception;
 	public Long findIngNo(String name) throws Exception;
