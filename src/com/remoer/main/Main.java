@@ -4,6 +4,7 @@ import com.remoer.ingredient.controller.IngredientController;
 import com.remoer.member.controller.MemberController;
 import com.remoer.member.vo.LoginVO;
 import com.remoer.notice.controller.NoticeController;
+import com.remoer.qna.controller.QnaController;
 import com.remoer.recipe.controller.RecipeController;
 
 public class Main {
@@ -39,6 +40,7 @@ public class Main {
 				new MemberController().execute();
 				break;
 			case "5":
+				new QnaController().execute();
 				break;
 			case "6":
 				if (login != null) {

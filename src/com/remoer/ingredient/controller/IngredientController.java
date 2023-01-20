@@ -14,10 +14,6 @@ import com.remoer.main.Execute;
 import com.remoer.main.In;
 import com.remoer.main.Main;
 import com.remoer.main.Out;
-import com.remoer.recipe.io.PrintRecipe;
-import com.remoer.recipe.service.RecipeUpdateServiceImpl;
-import com.remoer.recipe.service.RecipeViewServiceImpl;
-import com.remoer.recipe.vo.RecipeVO;
 
 public class IngredientController {
 	@SuppressWarnings("unchecked")
