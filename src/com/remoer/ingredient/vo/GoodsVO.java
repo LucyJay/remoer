@@ -3,9 +3,9 @@ package com.remoer.ingredient.vo;
 public class GoodsVO {
 
 	private String goods_name;
-	private Long quantity, price;
+	private Integer quantity, price;
 
-	public Long totalPrice() {
+	public Integer totalPrice() {
 		return quantity * price;
 	}
 
@@ -17,19 +17,19 @@ public class GoodsVO {
 		this.goods_name = goods_name;
 	}
 
-	public Long getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Long quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
-	public Long getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 

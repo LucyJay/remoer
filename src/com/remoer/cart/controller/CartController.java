@@ -1,15 +1,14 @@
-package com.remoer.order.controller;
+package com.remoer.cart.controller;
 
 import com.remoer.main.In;
-import com.remoer.main.Main;
 import com.remoer.main.Out;
 
-public class OrderController {
+public class CartController {
 	public void execute() {
 		while (true) {
 			try {
 
-				String[][] menus = { {}, { "구매내역", "구매내역상세", "배송지 수정", "주문취소" }, { "배송상태 변경" } };
+				String[][] menus = { {}, { "목록", "일부주문", "전체주문", "수량수정", "비우기" }, {} };
 				Out.menu("주문/배송조회", 3, "이전 메뉴", menus);
 
 				switch (In.getStr("메뉴를 입력하세요")) {
@@ -22,13 +21,11 @@ public class OrderController {
 					break;
 				case "4":
 					break;
+				case "5":
+					break;
 				case "0":
 					Out.sysln("이전 메뉴로 돌아갑니다.");
 					return;
-				case "5":
-					if (Main.isAdmin()) {
-						break;
-					}
 				default:
 					Out.sysln("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
 				}
