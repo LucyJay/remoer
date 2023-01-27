@@ -52,6 +52,14 @@ public class Out {
 		titleMini(title, num);
 	}
 
+	public static void titleMini(String title) {
+		titleMini(title, 30);
+	}
+
+	public static void lnTitleMini(String title) {
+		lnTitleMini(title, 30);
+	}
+
 	public static void menu(String ttl, int num, String zero, String[][] menus) {
 		title("레시피로 모인 사람들 REMOER");
 		titleMini(ttl, 36);
@@ -61,7 +69,7 @@ public class Out {
 		menuNum(zero, num, menus);
 		lineln("=", 48);
 	}
-	
+
 	public static void menuNum(String zero, int num, String[][] menus) {
 		List<String> menuList = new ArrayList<>(Arrays.asList(menus[0]));
 		if (Main.login != null) {
