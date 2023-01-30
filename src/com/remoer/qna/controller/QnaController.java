@@ -2,14 +2,6 @@ package com.remoer.qna.controller;
 
 import java.util.List;
 
-import com.remoer.ingredient.io.PrintIngredient;
-import com.remoer.ingredient.service.IngredientDeleteServiceImpl;
-import com.remoer.ingredient.service.IngredientListServiceImpl;
-import com.remoer.ingredient.service.IngredientUpdateServiceImpl;
-import com.remoer.ingredient.service.IngredientViewServiceImpl;
-import com.remoer.ingredient.service.IngredientWriteServiceImpl;
-import com.remoer.ingredient.vo.IngredientVO;
-import com.remoer.main.Check;
 import com.remoer.main.Execute;
 import com.remoer.main.In;
 import com.remoer.main.Main;

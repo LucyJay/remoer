@@ -3,7 +3,6 @@ package com.remoer.order.io;
 import java.util.List;
 
 import com.remoer.ingredient.vo.GoodsVO;
-import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.main.Main;
 import com.remoer.order.vo.OrderVO;
 
