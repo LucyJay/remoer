@@ -3,14 +3,13 @@ package com.remoer.qna.service;
 import com.remoer.main.ServiceInterface;
 import com.remoer.qna.dao.QnaDAO;
 import com.remoer.qna.dao.QnaDAOImpl;
-import com.remoer.qna.vo.QnaVO;
 
-public class QnaWriteAnswerServiceImpl implements ServiceInterface {
+public class QnaFaqDeleteServiceImpl implements ServiceInterface {
 
 	@Override
 	public Object service(Object obj) throws Exception {
 		QnaDAO dao = new QnaDAOImpl();
-		return dao.writeA((QnaVO) obj);
+		return dao.deleteFaq((Long) obj);
 	}
 
 }
