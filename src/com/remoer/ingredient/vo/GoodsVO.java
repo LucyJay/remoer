@@ -2,11 +2,20 @@ package com.remoer.ingredient.vo;
 
 public class GoodsVO {
 
+	private Long goods_no;
 	private String goods_name;
 	private Integer quantity, price;
 
 	public Integer totalPrice() {
 		return quantity * price;
+	}
+
+	public Long getGoods_no() {
+		return goods_no;
+	}
+
+	public void setGoods_no(Long goods_no) {
+		this.goods_no = goods_no;
 	}
 
 	public String getGoods_name() {

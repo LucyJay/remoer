@@ -14,6 +14,7 @@ import com.remoer.main.Execute;
 import com.remoer.main.In;
 import com.remoer.main.Main;
 import com.remoer.main.Out;
+import com.remoer.order.controller.OrderController;
 
 public class IngredientController {
 	@SuppressWarnings("unchecked")
@@ -53,11 +54,13 @@ public class IngredientController {
 						switch (In.getStr()) {
 						case "1":
 							if (Main.login != null) {
-								// 식재료 구매
+								OrderController oc = new OrderController();
+								oc.order(oc.buy(viewVO));
 							} else {
 								Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
 								break view;
 							}
+							break view;
 						case "2":
 							if (Main.login != null) {
 								// 식재료 장바구니 담기
@@ -132,7 +135,6 @@ public class IngredientController {
 							default:
 								Out.sys("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
 							}
-
 						}
 						break;
 					}
