@@ -11,8 +11,11 @@ import com.remoer.main.In;
 import com.remoer.main.Main;
 import com.remoer.main.Out;
 import com.remoer.order.io.PrintOrder;
+import com.remoer.order.service.OrderCancelServicelmpl;
 import com.remoer.order.service.OrderListServiceImpl;
 import com.remoer.order.service.OrderServiceImpl;
+import com.remoer.order.service.OrderUpdateAddressServiceImpl;
+import com.remoer.order.service.OrderUpdateDlvServiceImpl;
 import com.remoer.order.service.OrderViewServiceImpl;
 import com.remoer.order.vo.OrderVO;
 
@@ -40,25 +43,99 @@ public class OrderController {
 					}
 					break;
 				case "3":
+					Out.titleMini("배송지 수정");
+					Out.sys("현재 배송준비중인 경우에만 배송지를 수정할 수 있습니다.");
+					Long addressNo = In.getLong("확인할 주문번호");
+					OrderVO addressVO = (OrderVO) Execute.run(new OrderViewServiceImpl(), addressNo);
+					if (addressVO == null || !(addressVO.getId().equals(Main.login.getId()))) {
+						Out.sysln("존재하지 않는 주문번호이거나 본인의 주문번호가 아닙니다.");
+					} else if (!(addressVO.getStatus().equals("배송준비중"))) {
+						Out.sysln("이미 배송이 시작되어 배송지를 수정할 수 없습니다.");
+					} else {
+						addressVO.setAddress(In.getStr("배송지"));
+						addressVO.setName(In.getStr("수령인"));
+						addressVO.setTel(In.getStr("연락처"));
+						if ((Integer) Execute.run(new OrderUpdateAddressServiceImpl(), addressVO) == 1) {
+							Out.sysln("배송지가 정상적으로 수정되었습니다.");
+						} else
+							Out.sysln("배송지가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+					}
 					break;
 				case "4":
+					Long cancelNo = In.getLong("취소할 주문번호");
+					OrderVO cancelVO = (OrderVO) Execute.run(new OrderViewServiceImpl(), cancelNo);
+					if (cancelVO == null || !(cancelVO.getId().equals(Main.login.getId()))) {
+						Out.sysln("존재하지 않는 주문번호이거나 본인의 주문번호가 아닙니다.");
+					} else if (!(cancelVO.getStatus().equals("배송준비중"))) {
+						Out.sysln("이미 배송이 시작되어 취소할 수 없습니다.");
+					} else {
+						if ((Integer) Execute.run(new OrderCancelServicelmpl(), cancelNo) == 1) {
+							Out.sysln("배송지가 정상적으로 수정되었습니다.");
+						} else
+							Out.sysln("배송지가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+					}
 					break;
 				case "0":
 					Out.sysln("이전 메뉴로 돌아갑니다.");
 					return;
 				case "5":
 					if (Main.isAdmin()) {
+						dlv: while (true) {
+							Out.titleMini("배송상태 수정");
+							Out.sys("1. 배송시작  2. 배송완료  0. 이전 메뉴");
+							switch (In.getStr("")) {
+							case "1":
+								Out.sys("배송상태를 '배송준비중'에서 '배송중'으로 변경합니다.");
+								Long dlv1No = In.getLong("배송중으로 변경할 주문번호");
+								OrderVO dlv1VO = (OrderVO) Execute.run(new OrderViewServiceImpl(), dlv1No);
+								if (dlv1VO == null) {
+									Out.sysln("존재하지 않는 주문번호입니다.");
+								} else if (!(dlv1VO.getStatus().equals("배송준비중"))) {
+									Out.sysln("상태가 '배송준비중'인 주문번호가 아닙니다.");
+								} else {
+									dlv1VO.setStatus("배송중");
+									if ((Integer) Execute.run(new OrderUpdateDlvServiceImpl(), dlv1VO) == 1) {
+										Out.sysln("배송상태가 정상적으로 수정되었습니다.");
+									} else
+										Out.sysln("배송상태가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+								}
+								break dlv;
+
+							case "2":
+								Out.sys("배송상태를 '배송중'에서 '배송완료'로 변경합니다.");
+								Long dlv2No = In.getLong("배송완료로 변경할 주문번호");
+								OrderVO dlv2VO = (OrderVO) Execute.run(new OrderViewServiceImpl(), dlv2No);
+								if (dlv2VO == null) {
+									Out.sysln("존재하지 않는 주문번호입니다.");
+								} else if (!(dlv2VO.getStatus().equals("배송중"))) {
+									Out.sysln("상태가 '배송중'인 주문번호가 아닙니다.");
+								} else {
+									dlv2VO.setStatus("배송완료");
+									if ((Integer) Execute.run(new OrderUpdateDlvServiceImpl(), dlv2VO) == 1) {
+										Out.sysln("배송상태가 정상적으로 수정되었습니다.");
+									} else
+										Out.sysln("배송상태가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+								}
+								break dlv;
+							case "0":
+								Out.sysln("이전 메뉴로 돌아갑니다.");
+								break dlv;
+							}
+						}
 						break;
 					}
 				default:
 					Out.sysln("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
 				}
 
-			} catch (Exception e) {
+			} catch (
+
+			Exception e) {
 				e.printStackTrace();
 				Out.err("오류가 발생했습니다.", "다시 시도해 주세요.", "문의: 관리자(admin@remoer.com)");
 			}
 		}
+
 	}
 
 	public void order(List<GoodsVO> goods) {
