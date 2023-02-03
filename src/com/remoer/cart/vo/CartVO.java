@@ -3,7 +3,7 @@ package com.remoer.cart.vo;
 public class CartVO {
 
 	private Long no, goods_no;
-	private String id, goods_name;
+	private String id, goods_name, cart_date;
 	private Integer price, quantity;
 
 	public Integer totalPrice() {
@@ -40,6 +40,14 @@ public class CartVO {
 
 	public void setGoods_name(String goods_name) {
 		this.goods_name = goods_name;
+	}
+
+	public String getCart_date() {
+		return cart_date;
+	}
+
+	public void setCart_date(String cart_date) {
+		this.cart_date = cart_date;
 	}
 
 	public Integer getPrice() {

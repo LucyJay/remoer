@@ -166,9 +166,9 @@ public class OrderController {
 			}
 			vo.setList(goods);
 			if ((Integer) Execute.run(new OrderServiceImpl(), vo) == 1) {
-				Out.sysln("상품정보가 정상적으로 수정되었습니다.");
+				Out.sysln("상품이 정상적으로 주문되었습니다.");
 			} else
-				Out.sysln("상품정보가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+				Out.sysln("상품이 정상적으로 주문되지 않았습니다. 다시 시도해 주세요.");
 			return;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,17 +180,14 @@ public class OrderController {
 		List<GoodsVO> list = new ArrayList<>();
 		GoodsVO vo = new GoodsVO();
 		vo.setGoods_no(ivo.getNo());
-		vo.setPrice(ivo.getPrice());
 		vo.setQuantity(ivo.getQuantity());
 		list.add(vo);
 		return list;
 	}
 
-	public List<GoodsVO> buy(CartVO cvo) {
-		List<GoodsVO> list = new ArrayList<>();
+	public static List<GoodsVO> buy(List<GoodsVO> list, CartVO cvo) {
 		GoodsVO vo = new GoodsVO();
 		vo.setGoods_no(cvo.getNo());
-		vo.setPrice(cvo.getPrice());
 		vo.setQuantity(cvo.getQuantity());
 		list.add(vo);
 		return list;

@@ -13,7 +13,35 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 
 	@Override
 	public Integer order(OrderVO vo) throws Exception {
-		return null;
+		try {
+			con = DB.getConnection();
+			String sql = "INSERT INTO ord (no, id, name, address, tel) VALUES (ord_seq.nextval, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getId());
+			pstmt.setString(2, vo.getName());
+			pstmt.setString(3, vo.getAddress());
+			pstmt.setString(4, vo.getTel());
+			if (pstmt.executeUpdate() == 1) {
+				List<GoodsVO> list = vo.getList();
+				sql = "INSERT INTO ord_list VALUES (?, ?, ?)";
+				for (GoodsVO goods : list) {
+					pstmt = con.prepareStatement(sql);
+					pstmt.setLong(1, vo.getNo());
+					pstmt.setLong(2, goods.getGoods_no());
+					pstmt.setInt(3, goods.getQuantity());
+					if (pstmt.executeUpdate() != 1) {
+						return 0;
+					}
+				}
+				return 1;
+			}
+			return 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
 	}
 
 	@Override
@@ -95,20 +123,59 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 
 	@Override
 	public Integer updateAddress(OrderVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			con = DB.getConnection();
+			String sql = "UPDATE ord SET address = ?, name = ?, tel = ? where no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getAddress());
+			pstmt.setString(2, vo.getName());
+			pstmt.setString(3, vo.getTel());
+			pstmt.setLong(4, vo.getNo());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
 	}
 
 	@Override
 	public Integer cancel(Long no) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			con = DB.getConnection();
+			String sql = "UPDATE ord SET status = '주문취소' where no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
 	}
 
 	@Override
 	public Integer updateDlv(OrderVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			con = DB.getConnection();
+			String sql = "";
+			if (vo.getStatus().equals("배송완료")) {
+				sql = "UPDATE ord SET status = ?, delivery_date = sysdate where no = ?";
+			} else {
+				sql = "UPDATE ord SET status = ? where no = ?";
+			}
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getStatus());
+			pstmt.setLong(2, vo.getNo());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
 	}
 
 }
