@@ -15,7 +15,7 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 		try {
 			List<FaqVO> list = null;
 			con = DB.getConnection();
-			String sql = "SELECT no, title, content, ref_no, answer FROM faq ORDER BY ref_no, answer";
+			String sql = "SELECT no, title, content, answer FROM faq ORDER BY no";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -23,7 +23,6 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 					list = new ArrayList<>();
 				FaqVO vo = new FaqVO();
 				vo.setNo(rs.getLong("no"));
-				vo.setRef_no(rs.getLong("ref_no"));
 				vo.setTitle(rs.getString("title"));
 				vo.setContent(rs.getString("content"));
 				vo.setAnswer(rs.getString("answer"));
@@ -45,9 +44,9 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 			con = DB.getConnection();
 			String sql = "";
 			if (id == null) {
-				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date order by ref_no, answer";
+				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date order by no";
 			} else {
-				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date WHERE writer = ? order by ref_no, answer";
+				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date WHERE writer = ? order by no";
 			}
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -89,9 +88,9 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 				vo.setQtitle(rs.getString("title"));
 				vo.setQcontent(rs.getString("content"));
 				vo.setWriter(rs.getString("writer"));
+				vo.setQwriteDate(rs.getString("write_date"));
 				if (rs.getString("answer_date") != null) {
 					vo.setAnswer(true);
-					vo.setQwriteDate(rs.getString("write_date"));
 					vo.setAtitle(rs.getString("answer_title"));
 					vo.setAcontent(rs.getString("answer_content"));
 					vo.setAwriteDate(rs.getString("answer_date"));
@@ -163,7 +162,7 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 	public Integer writeA(QnaVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE qna SET answer = 1, answer_title = ?, answer_content = ?, answer_date = sysdate WHERE no = ?";
+			String sql = "UPDATE qna SET answer_title = ?, answer_content = ?, answer_date = sysdate WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getAtitle());
 			pstmt.setString(2, vo.getAcontent());
@@ -199,13 +198,13 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 	public Integer deleteA(Long no) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE qna SET answer = 0, answer_title = null, answer_content = null, answer_date = null WHERE no = ?";
+			String sql = "UPDATE qna SET answer_title = null, answer_content = null, answer_date = null WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception("공지 삭제 중 오류 발생");
+			throw new Exception("QNA 삭제 중 오류 발생");
 		} finally {
 			close();
 		}

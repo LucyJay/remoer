@@ -49,6 +49,8 @@ public class CartDAOImpl extends DAO implements CartDAO {
 			rs = pstmt.executeQuery();
 			vo = new CartVO();
 			vo.setId(rs.getString(1));
+			vo.setGoods_no(rs.getLong(2));
+			vo.setQuantity(rs.getInt(3));
 			return vo;
 		} catch (
 

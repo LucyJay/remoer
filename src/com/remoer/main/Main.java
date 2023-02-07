@@ -1,9 +1,11 @@
 package com.remoer.main;
 
+import com.remoer.cart.controller.CartController;
 import com.remoer.ingredient.controller.IngredientController;
 import com.remoer.member.controller.MemberController;
 import com.remoer.member.vo.LoginVO;
 import com.remoer.notice.controller.NoticeController;
+import com.remoer.order.controller.OrderController;
 import com.remoer.qna.controller.QnaController;
 import com.remoer.recipe.controller.RecipeController;
 
@@ -23,6 +25,7 @@ public class Main {
 			System.exit(1);
 		}
 		while (true) {
+			// 추가할 기능: 북마크, 재고관리
 			String[][] menus = { { "공지사항/이벤트", "레시피나눔", "식재료마켓", "회원정보", "고객센터" }, { "주문/배송", "장바구니", "북마크" }, {} };
 			Out.menu("REMOER에 오신 것을 환영합니다", 3, "종료", menus);
 
@@ -44,9 +47,15 @@ public class Main {
 				break;
 			case "6":
 				if (login != null) {
+					new OrderController().execute();
 					break;
 				}
 			case "7":
+				if (login != null) {
+					new CartController().execute();
+					break;
+				}
+			case "8":
 				if (login != null) {
 					break;
 				}

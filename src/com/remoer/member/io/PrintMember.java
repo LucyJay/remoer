@@ -17,12 +17,12 @@ public class PrintMember {
 			System.out.println();
 			System.out.println();
 			Out.title("회원 리스트");
-			System.out.println(" 아이디 | 이름 | 생년월일 | 성별 | 회원등급 | 상태");
+			System.out.println(" 아이디 | 닉네임 | 이름 | 생년월일 | 성별 | 회원등급 | 상태");
 			Out.lineln("-", 45);
 			for (int i = 0; i < list.size(); i++) {
 				LoginVO vo = list.get(i);
-				System.out.println(vo.getId() + " | " + vo.getName() + " | " + vo.getBirth() + " | " + vo.getGender()
-						+ " | " + vo.getGrade_name() + " | " + vo.getStatus());
+				System.out.println(vo.getId() + " | " + vo.getNickname() + " | " + vo.getName() + " | " + vo.getBirth()
+						+ " | " + vo.getGender() + " | " + vo.getGrade_name() + " | " + vo.getStatus());
 			}
 			Out.lineln("=", 45);
 		}
@@ -39,6 +39,7 @@ public class PrintMember {
 			System.out.println();
 			Out.titleMini(vo.getName() + "(" + vo.getId() + ")님의 회원정보", 32);
 			System.out.println("아이디 : " + vo.getId());
+			System.out.println("닉네임 : " + vo.getNickname());
 			System.out.println("이름 : " + vo.getName());
 			System.out.println("주소 : " + vo.getAddress() + "(기본배송지)");
 			System.out.println("전화번호 : " + vo.getTel());

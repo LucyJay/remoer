@@ -46,36 +46,39 @@ public class IngredientController {
 					Long viewNo = In.getLong("확인할 상품번호");
 					IngredientVO viewVO = (IngredientVO) Execute.run(new IngredientViewServiceImpl(), viewNo);
 					PrintIngredient.print(viewVO);
-					view: while (true) {
-						Out.lineln("-", 30);
-						String[][] viewMenus = { { "구매", "장바구니 담기" }, {}, {} };
-						Out.menuNum("이전 메뉴", 5, viewMenus);
-						Out.lineln("-", 30);
-						switch (In.getStr()) {
-						case "1":
-							if (Main.login != null) {
-								OrderController oc = new OrderController();
-								oc.order(oc.buy(viewVO));
-							} else {
-								Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
+					if (viewVO != null) {
+						view: while (true) {
+							Out.lineln("-", 30);
+							String[][] viewMenus = { { "구매", "장바구니 담기" }, {}, {} };
+							Out.menuNum("이전 메뉴", 5, viewMenus);
+							Out.lineln("-", 30);
+							switch (In.getStr()) {
+							case "1":
+								if (Main.login != null) {
+									OrderController oc = new OrderController();
+									oc.order(oc.buy(viewVO));
+								} else {
+									Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
+									break view;
+								}
 								break view;
-							}
-							break view;
-						case "2":
-							if (Main.login != null) {
-								// 식재료 장바구니 담기
+							case "2":
+								if (Main.login != null) {
+									// 식재료 장바구니 담기
 
-							} else {
-								Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
+								} else {
+									Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
+									break view;
+								}
+							case "0":
+								Out.sysln("이전 메뉴로 돌아갑니다.");
 								break view;
+							default:
+								Out.sysln("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
 							}
-						case "0":
-							Out.sysln("이전 메뉴로 돌아갑니다.");
-							break view;
-						default:
-							Out.sysln("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
 						}
 					}
+					break;
 				case "0":
 					Out.sysln("이전 메뉴로 돌아갑니다.");
 					return;

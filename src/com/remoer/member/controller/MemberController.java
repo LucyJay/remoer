@@ -58,6 +58,7 @@ public class MemberController {
 							Out.sys("중복되는 아이디가 존재합니다. 다른 아이디를 입력해 주세요.");
 						}
 						joinVO.setPw(In.getStr("비밀번호"));
+						joinVO.setNickname(In.getStr("닉네임"));
 						joinVO.setName(In.getStr("이름"));
 						while (true) {
 							try {
@@ -264,18 +265,18 @@ public class MemberController {
 								Out.sys("1. 전체회원  2. 정상회원  3. 휴면회원  4. 탈퇴회원  0. 취소");
 								switch (In.getStr("")) {
 								case "1":
-									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "all"));
+									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), null));
 									break menu;
 								case "2":
 									PrintMember
-											.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "normal"));
+											.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "정상"));
 									break menu;
 								case "3":
-									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "rest"));
+									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "휴면"));
 									break menu;
 								case "4":
 									PrintMember.print(
-											(List<LoginVO>) Execute.run(new MemberListServiceImpl(), "withdraw"));
+											(List<LoginVO>) Execute.run(new MemberListServiceImpl(), "탈퇴"));
 									break menu;
 								case "0":
 									Out.sysln("이전으로 돌아갑니다.");

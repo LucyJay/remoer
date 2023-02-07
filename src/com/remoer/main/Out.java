@@ -64,7 +64,7 @@ public class Out {
 		title("레시피로 모인 사람들 REMOER");
 		titleMini(ttl, 36);
 		if (Main.login != null)
-			System.out.println("[" + Main.login.getGrade_name() + "] " + Main.login.getName() + "(" + Main.login.getId()
+			System.out.println("[" + Main.login.getGrade_name() + "] " + Main.login.getNickname() + "(" + Main.login.getId()
 					+ ")님 반갑습니다.");
 		menuNum(zero, num, menus);
 		lineln("=", 48);

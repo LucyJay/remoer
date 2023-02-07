@@ -54,7 +54,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 				sql = "SELECT no, id, to_char(ord_date, 'yyyy-mm-dd') ord_date, status, to_char(delivery_date, 'yyyy-mm-dd') delivery_date FROM ord ORDER BY no desc";
 				pstmt = con.prepareStatement(sql);
 			} else {
-				sql = "SELECT no, ord_date, status, delivery_date FROM ord WHERE id = ? ORDER BY no desc";
+				sql = "SELECT no, to_char(ord_date, 'yyyy-mm-dd') ord_date, status, to_char(delivery_date, 'yyyy-mm-dd') delivery_date FROM ord WHERE id = ? ORDER BY no desc";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, id);
 			}
@@ -86,21 +86,22 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 		try {
 			OrderVO vo = null;
 			con = DB.getConnection();
-			String sql = "SELECT o.no, m.name, o.address, o.tel, o.ord_date, o.status, o.delivery_date FROM member m, ord o WHERE o.no = ? AND m.id=o.id";
+			String sql = "SELECT no, id, name, address, tel, ord_date, status, delivery_date FROM ord WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				vo = new OrderVO();
 				vo.setNo(rs.getLong(1));
-				vo.setName(rs.getString(2));
-				vo.setAddress(rs.getString(3));
-				vo.setTel(rs.getString(4));
-				vo.setOrder_date(rs.getString(5));
-				vo.setStatus(rs.getString(6));
-				vo.setDlv_date(rs.getString(7));
+				vo.setId(rs.getString(2));
+				vo.setName(rs.getString(3));
+				vo.setAddress(rs.getString(4));
+				vo.setTel(rs.getString(5));
+				vo.setOrder_date(rs.getString(6));
+				vo.setStatus(rs.getString(7));
+				vo.setDlv_date(rs.getString(8));
 
-				sql = "SELECT i.name, i.price, i.quantity FROM ord_list l, ingredient i WHERE l.ord_no=? AND i.no=l.ingre_no";
+				sql = "SELECT i.name, i.price, l.quantity FROM ord_list l, ingredient i WHERE l.ord_no = ? AND i.no = l.ingre_no";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setLong(1, no);
 				rs = pstmt.executeQuery();
@@ -144,7 +145,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 	public Integer cancel(Long no) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE ord SET status = '주문취소' where no = ?";
+			String sql = "UPDATE ord SET status = '구매취소' where no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			return pstmt.executeUpdate();

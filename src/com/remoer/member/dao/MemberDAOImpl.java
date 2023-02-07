@@ -16,7 +16,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 		try {
 			LoginVO loginVO = null;
 			con = DB.getConnection();
-			String sql = "SELECT m.id, m.pw, m.name, m.birth, m.address, m.tel, m.email, m.reg_date, m.login_date, m.grade Grade_no, g.Grade_name "
+			String sql = "SELECT m.id, m.pw, m.name, m.nickname, m.birth, m.address, m.tel, m.email, m.reg_date, m.login_date, m.grade grade_no, g.grade_name, m.status "
 					+ " FROM member m, grade g WHERE id = ? AND pw = ? AND m.grade = g.Grade_no";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
@@ -32,14 +32,16 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 					loginVO.setId(rs.getString("id"));
 					loginVO.setPw(rs.getString("pw"));
 					loginVO.setName(rs.getString("name"));
+					loginVO.setNickname(rs.getString("nickname"));
 					loginVO.setBirth(rs.getString("birth"));
 					loginVO.setAddress(rs.getString("address"));
 					loginVO.setTel(rs.getString("tel"));
 					loginVO.setEmail(rs.getString("email"));
 					loginVO.setReg_date(rs.getString("reg_date"));
 					loginVO.setLogin_date(rs.getString("login_date"));
-					loginVO.setGrade_no(rs.getInt("Grade_no"));
-					loginVO.setGrade_name(rs.getString("Grade_name"));
+					loginVO.setGrade_no(rs.getInt("grade_no"));
+					loginVO.setGrade_name(rs.getString("grade_name"));
+					loginVO.setStatus(rs.getString("status"));
 				}
 			}
 
@@ -78,15 +80,16 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 	public Integer join(LoginVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "INSERT INTO member (id, pw, name, birth, address, tel, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO member (id, pw, nickname, name, birth, address, tel, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getPw());
-			pstmt.setString(3, vo.getName());
-			pstmt.setString(4, vo.getBirth());
-			pstmt.setString(5, vo.getAddress());
-			pstmt.setString(6, vo.getTel());
-			pstmt.setString(7, vo.getEmail());
+			pstmt.setString(3, vo.getNickname());
+			pstmt.setString(4, vo.getName());
+			pstmt.setString(5, vo.getBirth());
+			pstmt.setString(6, vo.getAddress());
+			pstmt.setString(7, vo.getTel());
+			pstmt.setString(8, vo.getEmail());
 
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -134,7 +137,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception("ID 중복 확인 처리 중 오류 발생");
+			throw new Exception("PW 변경 처리 중 오류 발생");
 		} finally {
 			close();
 		}
@@ -144,7 +147,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 	public Integer updateCondate(String id) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE member SET conDate = sysdate WHERE id = ? ";
+			String sql = "UPDATE member SET login_date = sysdate WHERE id = ? ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			return pstmt.executeUpdate();
@@ -178,24 +181,25 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 		LoginVO vo = null;
 		try {
 			con = DB.getConnection();
-			String sql = "SELECT m.id, m.name, m.gender, to_char(m.birth, 'yyyy-mm-dd') birth, m.address, m.tel, m.email, to_char(m.regdate, 'yyyy-mm-dd') regdate, to_char(m.condate, 'yyyy-mm-dd hh:mi:ss') condate, m.status, m.Grade_no, g.Grade_name FROM member m, grade g WHERE id = ? AND m.Grade_no = g.Grade_no ";
+			String sql = "SELECT m.id, m.nickname, m.name, m.gender, to_char(m.birth, 'yyyy-mm-dd') birth, m.address, m.tel, m.email, to_char(m.reg_date, 'yyyy-mm-dd') reg_date, to_char(m.login_date, 'yyyy-mm-dd hh:mi:ss') login_date, m.status, m.grade_no, g.grade_name FROM member m, grade g WHERE id = ? AND m.grade = g.grade_no ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				vo = new LoginVO();
 				vo.setId(rs.getString(1));
-				vo.setName(rs.getString(2));
-				vo.setGender(rs.getString(3));
-				vo.setBirth(rs.getString(4));
-				vo.setAddress(rs.getString(5));
-				vo.setTel(rs.getString(6));
-				vo.setEmail(rs.getString(7));
-				vo.setReg_date(rs.getString(8));
-				vo.setLogin_date(rs.getString(9));
-				vo.setStatus(rs.getString(10));
-				vo.setGrade_no(rs.getInt(11));
-				vo.setGrade_name(rs.getString(12));
+				vo.setNickname(rs.getString(2));
+				vo.setName(rs.getString(3));
+				vo.setGender(rs.getString(4));
+				vo.setBirth(rs.getString(5));
+				vo.setAddress(rs.getString(6));
+				vo.setTel(rs.getString(7));
+				vo.setEmail(rs.getString(8));
+				vo.setReg_date(rs.getString(9));
+				vo.setLogin_date(rs.getString(10));
+				vo.setStatus(rs.getString(11));
+				vo.setGrade_no(rs.getInt(12));
+				vo.setGrade_name(rs.getString(13));
 			}
 			return vo;
 		} catch (Exception e) {
@@ -246,7 +250,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 	public Integer updateGrade(LoginVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE member SET Grade_no = ? WHERE id = ?";
+			String sql = "UPDATE member SET grade = ? WHERE id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, vo.getGrade_no());
 			pstmt.setString(2, vo.getId());
@@ -283,21 +287,14 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 		try {
 			con = DB.getConnection();
 			String sql = "";
-			switch (type) {
-			case "all":
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.Grade_name, m.status FROM member m, grade g WHERE m.Grade_no = g.Grade_no ORDER BY m.id";
-				break;
-			case "normal":
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.Grade_name, m.status FROM member m, grade g WHERE m.status = '정상' AND m.Grade_no = g.Grade_no ORDER BY m.id";
-				break;
-			case "rest":
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.Grade_name, m.status FROM member m, grade g WHERE m.status = '휴면' AND m.Grade_no = g.Grade_no ORDER BY m.id";
-				break;
-			case "withdraw":
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.Grade_name, m.status FROM member m, grade g WHERE m.status = '탈퇴' AND m.Grade_no = g.Grade_no ORDER BY m.id";
-				break;
+			if (type == null) {
+				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.grade_name, m.status FROM member m, grade g WHERE m.grade = g.grade_no ORDER BY m.id";
+				pstmt = con.prepareStatement(sql);
+			} else {
+				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.grade_name, m.status FROM member m, grade g WHERE m.status = ? AND m.grade = g.grade_no ORDER BY m.id";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, type);
 			}
-			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				if (list == null)
@@ -324,7 +321,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 	public Integer rest(Date date) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE member SET status = '휴면' WHERE condate < ? AND status = '정상'";
+			String sql = "UPDATE member SET status = '휴면' WHERE login_date < ? AND status = '정상'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setDate(1, date);
 			return pstmt.executeUpdate();
