@@ -42,6 +42,7 @@ public class IngredientController {
 						} else
 							Out.sys("'y' 또는 'n'만 입력할 수 있습니다.");
 					}
+					break;
 				case "2":
 					Long viewNo = In.getLong("확인할 상품번호");
 					IngredientVO viewVO = (IngredientVO) Execute.run(new IngredientViewServiceImpl(), viewNo);

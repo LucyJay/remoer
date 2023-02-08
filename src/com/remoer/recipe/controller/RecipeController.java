@@ -12,10 +12,12 @@ import com.remoer.main.Out;
 import com.remoer.recipe.io.PrintRecipe;
 import com.remoer.recipe.service.RecipeCheckReplyWriterServiceImpl;
 import com.remoer.recipe.service.RecipeCheckWriterServiceImpl;
+import com.remoer.recipe.service.RecipeDeleteReplyServiceImpl;
 import com.remoer.recipe.service.RecipeDeleteServiceImpl;
 import com.remoer.recipe.service.RecipeDestarServiceImpl;
 import com.remoer.recipe.service.RecipeListServiceImpl;
 import com.remoer.recipe.service.RecipeMyListServiceImpl;
+import com.remoer.recipe.service.RecipeReplyServiceImpl;
 import com.remoer.recipe.service.RecipeStarServiceImpl;
 import com.remoer.recipe.service.RecipeUpdateReplyServiceImpl;
 import com.remoer.recipe.service.RecipeUpdateServiceImpl;
@@ -98,7 +100,7 @@ public class RecipeController {
 								newReply.setContent(newReplyContent);
 								newReply.setWriter(Main.login.getId());
 								newReply.setRecipeNo(viewNo);
-								if ((Integer) Execute.run(new RecipeStarServiceImpl(), newReply) == 1) {
+								if ((Integer) Execute.run(new RecipeReplyServiceImpl(), newReply) == 1) {
 									Out.sysln("댓글이 등록되었습니다.");
 								} else {
 									Out.sysln("댓글이 정상적으로 등록되지 않았습니다. 다시 시도해 주세요.");
@@ -120,9 +122,12 @@ public class RecipeController {
 								}
 								break view;
 							case "5":
-								Long delRepNo = In.getLong("삭제할 댓글번호");
-								if ((boolean) Execute.run(new RecipeCheckReplyWriterServiceImpl(), delRepNo)) {
-									if ((Integer) Execute.run(new RecipeUpdateReplyServiceImpl(), delRepNo) == 1) {
+								ReplyVO delRepVO = new ReplyVO();
+								delRepVO.setNo(In.getLong("삭제할 댓글번호"));
+								delRepVO.setWriter(Main.login.getId());
+								if ((boolean) Execute.run(new RecipeCheckReplyWriterServiceImpl(), delRepVO)) {
+									if ((Integer) Execute.run(new RecipeDeleteReplyServiceImpl(),
+											delRepVO.getNo()) == 1) {
 										Out.sysln("댓글이 삭제되었습니다.");
 									} else {
 										Out.sysln("댓글이 정상적으로 삭제되지 않았습니다. 다시 시도해 주세요.");
@@ -193,10 +198,10 @@ public class RecipeController {
 								switch (In.getStr("")) {
 								case "1":
 									updateRecipe.setTitle(In.getStr("제목"));
-									break update;
+									break;
 								case "2":
 									updateRecipe.setContent(In.getStr("내용"));
-									break update;
+									break;
 								case "3":
 									updateIng = true;
 									Out.sys("사용된 식재료를 모두 태그해 주세요. 모두 입력한 후 0을 입력해 주세요.");
@@ -212,6 +217,7 @@ public class RecipeController {
 											updateRecipe.getIngreList().add(updIng);
 										}
 									}
+									break;
 								case "9":
 									Out.sysln("수정을 취소하고 이전으로 돌아갑니다.");
 									break update;
@@ -228,7 +234,7 @@ public class RecipeController {
 							}
 
 						} else {
-							Out.sysln("본인이 작성한 댓글만 수정할 수 있습니다.");
+							Out.sysln("본인이 작성한 레시피만 수정할 수 있습니다.");
 						}
 						break;
 					}

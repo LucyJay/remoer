@@ -97,7 +97,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 	public RecipeVO view(Long no) throws Exception {
 		RecipeVO vo = null;
 		try {
-			//recipeVO 일반 데이터
+			// recipeVO 일반 데이터
 			con = DB.getConnection();
 			String sql = "SELECT r.no, r.title, r.content,  m.nickname, to_char(r.write_date, 'yyyy-mm-dd') write_date, to_char(r.update_date, 'yyyy-mm-dd') update_date, "
 					+ " (SELECT count(star) FROM star WHERE star.recipe = r.no GROUP BY recipe) scnt, (SELECT avg(star) FROM star WHERE star.recipe = r.no GROUP BY recipe) savg, "
@@ -118,7 +118,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				vo.setAvgStar(rs.getDouble(8));
 				vo.setCntReply(rs.getLong(9));
 			}
-			//식재료 태그 관련 데이터
+			// 식재료 태그 관련 데이터
 			sql = "SELECT i.no, i.name FROM ingredient i, rec_ingr ri WHERE ri.rec_no = ? AND ri.ingr_no = i.no ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
@@ -131,9 +131,9 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				ingVO.setName(rs.getString(2));
 				vo.getIngreList().add(ingVO);
 			}
-			
-			//댓글 데이터
-			sql = "SELECT r.content, m.nickname, to_char(r.write_date, 'yyyy-mm-dd hh:mi:ss') write_date "
+
+			// 댓글 데이터
+			sql = "SELECT r.no, r.content, m.nickname, to_char(r.write_date, 'yyyy-mm-dd hh:mi:ss') write_date "
 					+ " FROM reply r, member m WHERE r.recipe = ? AND r.writer = m.id ORDER BY r.no";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
@@ -142,12 +142,13 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 				if (vo.getReplyList() == null)
 					vo.setReplyList(new ArrayList<>());
 				ReplyVO repVO = new ReplyVO();
-				repVO.setContent(rs.getString(1));
-				repVO.setWriter(rs.getString(2));
-				repVO.setWrite_date(rs.getString(3));
+				repVO.setNo(rs.getLong("no"));
+				repVO.setContent(rs.getString("content"));
+				repVO.setWriter(rs.getString("nickname"));
+				repVO.setWrite_date(rs.getString("write_date"));
 				vo.getReplyList().add(repVO);
 			}
-			
+
 			return vo;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,7 +157,6 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 			close();
 		}
 	}
-
 
 	@Override
 	public Integer write(RecipeVO rec) throws Exception {
@@ -176,7 +176,6 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 			close();
 		}
 	}
-
 
 	@Override
 	public Integer writeIng(String name) throws Exception {
@@ -318,7 +317,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 			close();
 		}
 	}
-	
+
 	@Override
 	public Integer updateReply(ReplyVO vo) throws Exception {
 		try {
@@ -369,7 +368,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 			close();
 		}
 	}
-	
+
 	@Override
 	public Integer deleteI_R(Long rn) throws Exception {
 		try {

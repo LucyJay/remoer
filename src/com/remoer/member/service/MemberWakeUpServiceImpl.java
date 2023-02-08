@@ -3,7 +3,6 @@ package com.remoer.member.service;
 import com.remoer.main.ServiceInterface;
 import com.remoer.member.dao.MemberDAO;
 import com.remoer.member.dao.MemberDAOImpl;
-import com.remoer.member.vo.LoginVO;
 
 public class MemberWakeUpServiceImpl implements ServiceInterface {
 
@@ -11,7 +10,7 @@ public class MemberWakeUpServiceImpl implements ServiceInterface {
 	public Object service(Object obj) throws Exception {
 		MemberDAO dao = new MemberDAOImpl();
 
-		return dao.wakeUp((LoginVO) obj);
+		return dao.wakeUp((String) obj);
 	}
 
 }

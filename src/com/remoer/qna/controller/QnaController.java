@@ -46,7 +46,11 @@ public class QnaController {
 							PrintQna.print((List<QnaVO>) Execute.run(new QnaListServiceImpl(), null));
 							break list;
 						case "2":
-							PrintQna.print((List<QnaVO>) Execute.run(new QnaListServiceImpl(), Main.login.getId()));
+							if (Main.login == null) {
+								Out.sysln("로그인 후 이용하실 수 있습니다.");
+							} else {
+								PrintQna.print((List<QnaVO>) Execute.run(new QnaListServiceImpl(), Main.login.getId()));
+							}
 							break list;
 						default:
 							Out.sys("1 또는 2만 입력하실 수 있습니다.");

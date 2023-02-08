@@ -29,7 +29,7 @@ public interface MemberDAO {
 
 	public Integer updateGrade(LoginVO vo) throws Exception;
 
-	public Integer wakeUp(LoginVO vo) throws Exception;
+	public Integer wakeUp(String id) throws Exception;
 
 	public List<LoginVO> list(String type) throws Exception;
 

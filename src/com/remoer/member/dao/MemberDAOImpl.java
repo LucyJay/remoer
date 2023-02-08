@@ -80,7 +80,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 	public Integer join(LoginVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "INSERT INTO member (id, pw, nickname, name, birth, address, tel, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO member (id, pw, nickname, name, birth, address, tel, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getPw());
@@ -181,25 +181,24 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 		LoginVO vo = null;
 		try {
 			con = DB.getConnection();
-			String sql = "SELECT m.id, m.nickname, m.name, m.gender, to_char(m.birth, 'yyyy-mm-dd') birth, m.address, m.tel, m.email, to_char(m.reg_date, 'yyyy-mm-dd') reg_date, to_char(m.login_date, 'yyyy-mm-dd hh:mi:ss') login_date, m.status, m.grade_no, g.grade_name FROM member m, grade g WHERE id = ? AND m.grade = g.grade_no ";
+			String sql = "SELECT m.id, m.nickname, m.name, to_char(m.birth, 'yyyy-mm-dd') birth, m.address, m.tel, m.email, to_char(m.reg_date, 'yyyy-mm-dd') reg_date, to_char(m.login_date, 'yyyy-mm-dd hh:mi:ss') login_date, m.status, m.grade, g.grade_name FROM member m, grade g WHERE id = ? AND m.grade = g.grade_no ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				vo = new LoginVO();
-				vo.setId(rs.getString(1));
-				vo.setNickname(rs.getString(2));
-				vo.setName(rs.getString(3));
-				vo.setGender(rs.getString(4));
-				vo.setBirth(rs.getString(5));
-				vo.setAddress(rs.getString(6));
-				vo.setTel(rs.getString(7));
-				vo.setEmail(rs.getString(8));
-				vo.setReg_date(rs.getString(9));
-				vo.setLogin_date(rs.getString(10));
-				vo.setStatus(rs.getString(11));
-				vo.setGrade_no(rs.getInt(12));
-				vo.setGrade_name(rs.getString(13));
+				vo.setId(rs.getString("id"));
+				vo.setNickname(rs.getString("nickname"));
+				vo.setName(rs.getString("name"));
+				vo.setBirth(rs.getString("birth"));
+				vo.setAddress(rs.getString("address"));
+				vo.setTel(rs.getString("tel"));
+				vo.setEmail(rs.getString("email"));
+				vo.setReg_date(rs.getString("reg_date"));
+				vo.setLogin_date(rs.getString("login_date"));
+				vo.setStatus(rs.getString("status"));
+				vo.setGrade_no(rs.getInt("grade"));
+				vo.setGrade_name(rs.getString("grade_name"));
 			}
 			return vo;
 		} catch (Exception e) {
@@ -264,14 +263,12 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 	}
 
 	@Override
-	public Integer wakeUp(LoginVO vo) throws Exception {
+	public Integer wakeUp(String id) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE member SET status = '정상' WHERE id = ? AND name = ? AND tel = ?";
+			String sql = "UPDATE member SET status = '정상' WHERE id = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, vo.getId());
-			pstmt.setString(2, vo.getName());
-			pstmt.setString(3, vo.getTel());
+			pstmt.setString(1, id);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -288,10 +285,10 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 			con = DB.getConnection();
 			String sql = "";
 			if (type == null) {
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.grade_name, m.status FROM member m, grade g WHERE m.grade = g.grade_no ORDER BY m.id";
+				sql = "SELECT m.id, m.nickname, m.name, to_char(m.birth, 'yymmdd') birth, g.grade_name, m.status FROM member m, grade g WHERE m.grade = g.grade_no ORDER BY m.id";
 				pstmt = con.prepareStatement(sql);
 			} else {
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, m.gender, g.grade_name, m.status FROM member m, grade g WHERE m.status = ? AND m.grade = g.grade_no ORDER BY m.id";
+				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, g.grade_name, m.status FROM member m, grade g WHERE m.status = ? AND m.grade = g.grade_no ORDER BY m.id";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, type);
 			}
@@ -300,12 +297,12 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 				if (list == null)
 					list = new ArrayList<>();
 				LoginVO vo = new LoginVO();
-				vo.setId(rs.getString(1));
-				vo.setName(rs.getString(2));
-				vo.setBirth(rs.getString(3));
-				vo.setGender(rs.getString(4));
-				vo.setGrade_name(rs.getString(5));
-				vo.setStatus(rs.getString(6));
+				vo.setId(rs.getString("id"));
+				vo.setNickname(rs.getString("nickname"));
+				vo.setName(rs.getString("name"));
+				vo.setBirth(rs.getString("birth"));
+				vo.setGrade_name(rs.getString("grade_name"));
+				vo.setStatus(rs.getString("status"));
 				list.add(vo);
 			}
 			return list;

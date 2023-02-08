@@ -17,12 +17,12 @@ public class PrintMember {
 			System.out.println();
 			System.out.println();
 			Out.title("회원 리스트");
-			System.out.println(" 아이디 | 닉네임 | 이름 | 생년월일 | 성별 | 회원등급 | 상태");
+			System.out.println(" 아이디 | 닉네임 | 이름 | 생년월일 | 회원등급 | 상태");
 			Out.lineln("-", 45);
 			for (int i = 0; i < list.size(); i++) {
 				LoginVO vo = list.get(i);
 				System.out.println(vo.getId() + " | " + vo.getNickname() + " | " + vo.getName() + " | " + vo.getBirth()
-						+ " | " + vo.getGender() + " | " + vo.getGrade_name() + " | " + vo.getStatus());
+						+ " | " + vo.getGrade_name() + " | " + vo.getStatus());
 			}
 			Out.lineln("=", 45);
 		}
@@ -46,7 +46,6 @@ public class PrintMember {
 			System.out.println("이메일 : " + vo.getEmail());
 			if (Main.isAdmin()) {
 				System.out.println("생년월일 : " + vo.getBirth());
-				System.out.println("성별 : " + vo.getGender());
 				System.out.println("회원등급 : " + vo.getGrade_name());
 				System.out.println("상태 : " + vo.getStatus());
 				System.out.println("가입일 : " + vo.getReg_date());

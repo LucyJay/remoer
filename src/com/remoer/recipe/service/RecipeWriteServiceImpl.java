@@ -17,7 +17,7 @@ public class RecipeWriteServiceImpl implements ServiceInterface {
 		RecipeDAO dao = new RecipeDAOImpl();
 		IngredientDAO daoI = new IngredientDAOImpl();
 		Object[] objs = (Object[]) obj;
-		dao.update((RecipeVO) objs[0]);
+		dao.write((RecipeVO) objs[0]);
 		Long recNo = dao.findRecNo();
 		List<String> ingList = (List<String>) objs[1];
 		for (String ing : ingList) {

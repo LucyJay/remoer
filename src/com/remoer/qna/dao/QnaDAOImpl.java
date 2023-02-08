@@ -44,12 +44,13 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 			con = DB.getConnection();
 			String sql = "";
 			if (id == null) {
-				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date order by no";
+				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date FROM qna order by no";
+				pstmt = con.prepareStatement(sql);
 			} else {
-				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date WHERE writer = ? order by no";
+				sql = "SELECT no, title, writer, to_char(write_date, 'yyyy-mm-dd') write_date, answer_date FROM qna WHERE writer = ? order by no";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
 			}
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				if (list == null)

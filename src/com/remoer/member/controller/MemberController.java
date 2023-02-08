@@ -19,6 +19,7 @@ import com.remoer.member.service.MemberUpdateInfoServiceImpl;
 import com.remoer.member.service.MemberUpdatePwServiceImpl;
 import com.remoer.member.service.MemberUpdateStatusServiceImpl;
 import com.remoer.member.service.MemberViewServiceImpl;
+import com.remoer.member.service.MemberWakeUpServiceImpl;
 import com.remoer.member.vo.LoginVO;
 
 public class MemberController {
@@ -41,7 +42,24 @@ public class MemberController {
 						login = (LoginVO) Execute.run(new MemberLoginServiceImpl(), login);
 						if (login == null)
 							Out.sysln("로그인에 실패했습니다. 아이디와 비밀번호를 확인해 주세요.");
-						else {
+						else if (login.getStatus().equals("탈퇴")) {
+							Out.sys("탈퇴한 아이디입니다.");
+							Out.sysln("다른 아이디로 회원가입 후 이용해 주세요.");
+						} else if (login.getStatus().equals("휴면")) {
+							Out.sys("3개월 이상 로그인 이력이 없어 휴면 상태로 전환된 아이디입니다.");
+							Out.sys("휴면 해제를 위해 이름과 전화번호를 입력해 주세요.");
+							String sleepName = In.getStr("이름");
+							String sleepTel = In.getStr("전화번호(- 포함)");
+							if (login.getName().equals(sleepName) && login.getTel().equals(sleepTel)) {
+								if ((Integer) Execute.run(new MemberWakeUpServiceImpl(), login.getId()) == 1) {
+									Out.sysln("휴면 상태를 해제하고 로그인되었습니다.");
+									Main.login = login;
+								} else {
+									Out.sysln("휴면 해제에 실패했습니다. 다시 시도해 주세요.");
+								}
+							} else
+								Out.sysln("회원정보가 일치하지 않아 휴면 해제에 실패했습니다. 정보를 확인하고 다시 시도해 주세요.");
+						} else {
 							Out.sysln("로그인에 성공했습니다.");
 							Main.login = login;
 						}
@@ -109,7 +127,7 @@ public class MemberController {
 							} else
 								Out.sys("형식에 맞게 다시 입력하세요.");
 						}
-						Object result = Execute.run(new MemberFindIdServiceImpl(), findVO);
+						String result = (String) Execute.run(new MemberFindIdServiceImpl(), findVO);
 						if (result == null) {
 							Out.sysln("일치하는 아이디가 없습니다. 먼저 회원가입을 진행해 주세요.");
 						} else
@@ -128,13 +146,18 @@ public class MemberController {
 							} else
 								Out.sys("형식에 맞게 다시 입력하세요.");
 						}
-						Out.sys("비밀번호를 변경합니다. 새로운 비밀번호를 입력해 주세요.");
-						pwVO.setPw(In.getStr(""));
-						if ((Integer) Execute.run(new MemberUpdatePwServiceImpl(), pwVO) == 1) {
-							Out.sysln("비밀번호가 변경되었습니다. 변경된 비밀번호로 로그인해 주세요.");
+						String pwVOid = (String) Execute.run(new MemberFindIdServiceImpl(), pwVO);
+						if (pwVOid == null) {
+							Out.sysln("일치하는 정보가 없습니다. 먼저 회원가입을 진행해 주세요.");
 						} else {
-							Out.sys("일치하는 정보가 없습니다.");
-							Out.sysln("가입하실 때 입력한 아이디와 이름, 전화번호를 다시 확인해 주세요.");
+							Out.sys("비밀번호를 변경합니다. 새로운 비밀번호를 입력해 주세요.");
+							pwVO.setPw(In.getStr(""));
+							if ((Integer) Execute.run(new MemberUpdatePwServiceImpl(), pwVO) == 1) {
+								Out.sysln("비밀번호가 변경되었습니다. 변경된 비밀번호로 로그인해 주세요.");
+							} else {
+								Out.sys("일치하는 정보가 없습니다.");
+								Out.sysln("가입하실 때 입력한 아이디와 이름, 전화번호를 다시 확인해 주세요.");
+							}
 						}
 						break;
 					case "0":
@@ -268,15 +291,13 @@ public class MemberController {
 									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), null));
 									break menu;
 								case "2":
-									PrintMember
-											.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "정상"));
+									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "정상"));
 									break menu;
 								case "3":
 									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "휴면"));
 									break menu;
 								case "4":
-									PrintMember.print(
-											(List<LoginVO>) Execute.run(new MemberListServiceImpl(), "탈퇴"));
+									PrintMember.print((List<LoginVO>) Execute.run(new MemberListServiceImpl(), "탈퇴"));
 									break menu;
 								case "0":
 									Out.sysln("이전으로 돌아갑니다.");
@@ -463,17 +484,6 @@ public class MemberController {
 				break;
 			case "name":
 				vo.setName(In.getStr("이름"));
-				break;
-			case "gender":
-				while (true) {
-					String gender = In.getStr("성별(남/여)");
-					if (gender.equals("남") || gender.equals("여")) {
-						vo.setGender(gender);
-						break;
-					} else {
-						Out.sys("'남' 또는 '여'만 입력할 수 있습니다.");
-					}
-				}
 				break;
 			case "birth":
 				while (true) {
