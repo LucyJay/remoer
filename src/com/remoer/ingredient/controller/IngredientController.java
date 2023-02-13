@@ -92,7 +92,7 @@ public class IngredientController {
 							if (!Check.isAllKor(iname)) {
 								Out.sys("한글로만 입력 가능합니다.");
 							} else {
-								writeVO.setName(In.getStr("식재료명"));
+								writeVO.setName(iname);
 								break;
 							}
 						}

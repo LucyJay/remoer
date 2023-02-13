@@ -15,7 +15,7 @@ public class IngredientWriteServiceImpl implements ServiceInterface {
 		if (checkNo == 0L) {
 			return dao.write(vo);
 		} else if (checkNo == -1L) {
-			return null;
+			return -1;
 		} else {
 			vo.setNo(checkNo);
 			return dao.update(vo);

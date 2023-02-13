@@ -188,11 +188,11 @@ public class RecipeController {
 						Long updateNo = In.getLong("수정할 글번호");
 						updateRecipe.setNo(updateNo);
 						updateRecipe.setId(Main.login.getId());
+						boolean updateIng = false;
 						if ((boolean) Execute.run(new RecipeCheckWriterServiceImpl(), updateRecipe)) {
 							updateRecipe = (RecipeVO) Execute.run(new RecipeViewServiceImpl(), updateNo);
 							PrintRecipe.print(updateRecipe);
 							update: while (true) {
-								boolean updateIng = false;
 								Out.sys("수정할 항목을 선택하세요.");
 								Out.sys("1. 제목  2. 내용  3. 식재료  9. 취소  0. 수정완료");
 								switch (In.getStr("")) {
@@ -204,6 +204,7 @@ public class RecipeController {
 									break;
 								case "3":
 									updateIng = true;
+									updateRecipe.getIngreList().clear();
 									Out.sys("사용된 식재료를 모두 태그해 주세요. 모두 입력한 후 0을 입력해 주세요.");
 									while (true) {
 										String updateTag = In.getStr("");

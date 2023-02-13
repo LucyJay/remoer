@@ -99,7 +99,7 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 		try {
 			// recipeVO 일반 데이터
 			con = DB.getConnection();
-			String sql = "SELECT r.no, r.title, r.content,  m.nickname, to_char(r.write_date, 'yyyy-mm-dd') write_date, to_char(r.update_date, 'yyyy-mm-dd') update_date, "
+			String sql = "SELECT r.no, r.title, r.content,  m.id, m.nickname, to_char(r.write_date, 'yyyy-mm-dd') write_date, to_char(r.update_date, 'yyyy-mm-dd') update_date, "
 					+ " (SELECT count(star) FROM star WHERE star.recipe = r.no GROUP BY recipe) scnt, (SELECT avg(star) FROM star WHERE star.recipe = r.no GROUP BY recipe) savg, "
 					+ " (SELECT count(no) FROM reply WHERE reply.recipe = r.no GROUP BY recipe) crep "
 					+ " FROM recipe r, member m WHERE r.no = ? AND r.writer = m.id ";
@@ -108,15 +108,16 @@ public class RecipeDAOImpl extends DAO implements RecipeDAO {
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				vo = new RecipeVO();
-				vo.setNo(rs.getLong(1));
-				vo.setTitle(rs.getString(2));
-				vo.setContent(rs.getString(3));
-				vo.setWriter(rs.getString(4));
-				vo.setWrite_date(rs.getString(5));
-				vo.setUpdate_date(rs.getString(6));
-				vo.setCntStar(rs.getLong(7));
-				vo.setAvgStar(rs.getDouble(8));
-				vo.setCntReply(rs.getLong(9));
+				vo.setNo(rs.getLong("no"));
+				vo.setTitle(rs.getString("title"));
+				vo.setContent(rs.getString("content"));
+				vo.setId(rs.getString("id"));
+				vo.setWriter(rs.getString("nickname"));
+				vo.setWrite_date(rs.getString("write_date"));
+				vo.setUpdate_date(rs.getString("update_date"));
+				vo.setCntStar(rs.getLong("scnt"));
+				vo.setAvgStar(rs.getDouble("savg"));
+				vo.setCntReply(rs.getLong("crep"));
 			}
 			// 식재료 태그 관련 데이터
 			sql = "SELECT i.no, i.name FROM ingredient i, rec_ingr ri WHERE ri.rec_no = ? AND ri.ingr_no = i.no ";

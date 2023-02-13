@@ -34,8 +34,8 @@ public class PrintIngredient {
 		System.out.println(vo.getNo() + " | " + vo.getName());
 		System.out.println("----------------------------------------------");
 		System.out.println("설명: " + vo.getDescription());
-		System.out.print("가격: " + vo.getPrice() + "원");
-		System.out.print("재고: " + vo.getQuantity() + "개");
+		System.out.println("가격: " + vo.getPrice() + "원");
+		System.out.println("재고: " + vo.getQuantity() + "개");
 		System.out.println("=============================================");
 	}
 
