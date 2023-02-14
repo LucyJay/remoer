@@ -79,7 +79,7 @@ public class IngredientDAOImpl extends DAO implements IngredientDAO {
 				if (rs.getObject(2) == null)
 					return rs.getLong(1);
 				else
-				return -1L;
+					return -1L;
 			}
 			return 0L;
 
@@ -95,7 +95,9 @@ public class IngredientDAOImpl extends DAO implements IngredientDAO {
 	public Integer update(IngredientVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE ingredient SET description = ?, price = ?, quantity = ? where no = ?";
+			String sql = "UPDATE ingredient SET quantity = 0 where no = ? AND quantity is null";
+			pstmt.executeUpdate(sql);
+			sql = "UPDATE ingredient SET description = ?, price = ?, quantity = quantity + ? where no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getDescription());
 			pstmt.setInt(2, vo.getPrice());
