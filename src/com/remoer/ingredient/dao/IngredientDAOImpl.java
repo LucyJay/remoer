@@ -79,7 +79,7 @@ public class IngredientDAOImpl extends DAO implements IngredientDAO {
 				if (rs.getObject(2) == null)
 					return rs.getLong(1);
 				else
-				return -1L;
+					return -1L;
 			}
 			return 0L;
 
