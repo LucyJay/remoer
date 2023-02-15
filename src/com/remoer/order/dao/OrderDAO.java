@@ -7,6 +7,9 @@ import com.remoer.order.vo.OrderVO;
 public interface OrderDAO {
 
 	public Integer order(OrderVO vo) throws Exception;
+	public Long findOrderNo(String id) throws Exception;
+	public Integer orderGoods(OrderVO vo) throws Exception;
+	Integer minusQuantity(OrderVO vo) throws Exception;
 
 	public List<OrderVO> list(String id) throws Exception;
 
@@ -17,5 +20,6 @@ public interface OrderDAO {
 	public Integer cancel(Long no) throws Exception;
 
 	public Integer updateDlv(OrderVO vo) throws Exception;
+
 
 }

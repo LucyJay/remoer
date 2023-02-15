@@ -21,24 +21,76 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 			pstmt.setString(2, vo.getName());
 			pstmt.setString(3, vo.getAddress());
 			pstmt.setString(4, vo.getTel());
-			if (pstmt.executeUpdate() == 1) {
-				List<GoodsVO> list = vo.getList();
-				sql = "INSERT INTO ord_list VALUES (?, ?, ?)";
-				for (GoodsVO goods : list) {
-					pstmt = con.prepareStatement(sql);
-					pstmt.setLong(1, vo.getNo());
-					pstmt.setLong(2, goods.getGoods_no());
-					pstmt.setInt(3, goods.getQuantity());
-					if (pstmt.executeUpdate() != 1) {
-						return 0;
-					}
-				}
-				return 1;
-			}
-			return 0;
+			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Long findOrderNo(String id) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "SELECT max(no) FROM ord WHERE id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				return rs.getLong(1);
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer orderGoods(OrderVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			List<GoodsVO> list = vo.getList();
+			String sql = "INSERT INTO ord_list VALUES (?, ?, ?)";
+			for (GoodsVO goods : list) {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setLong(1, vo.getNo());
+				pstmt.setLong(2, goods.getGoods_no());
+				pstmt.setInt(3, goods.getQuantity());
+				if (pstmt.executeUpdate() != 1) {
+					return 0;
+				}
+			}
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public Integer minusQuantity(OrderVO vo) throws Exception {
+		try {
+			con = DB.getConnection();
+			List<GoodsVO> list = vo.getList();
+			String sql = "UPDATE ingredient SET quantity = quantity - ? WHERE no = ?";
+			for (GoodsVO goods : list) {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, goods.getQuantity());
+				pstmt.setLong(2, goods.getGoods_no());
+				if (pstmt.executeUpdate() != 1) {
+					return 0;
+				}
+			}
+			return 1;
+		} catch (Exception e) {
+			return 0;
 		} finally {
 			close();
 		}

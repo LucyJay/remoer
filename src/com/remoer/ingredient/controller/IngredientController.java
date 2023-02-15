@@ -56,6 +56,15 @@ public class IngredientController {
 							switch (In.getStr()) {
 							case "1":
 								if (Main.login != null) {
+									while (true) {
+										int quantity = In.getInt("구매할 수량");
+										if (quantity > viewVO.getQuantity()) {
+											Out.sys("재고가 부족합니다. 다시 입력해 주세요.");
+											continue;
+										}
+										viewVO.setQuantity(quantity);
+										break;
+									}
 									OrderController oc = new OrderController();
 									oc.order(oc.buy(viewVO));
 								} else {
@@ -114,30 +123,32 @@ public class IngredientController {
 						Long updateNo = In.getLong("수정할 상품번호");
 						IngredientVO updateVO = (IngredientVO) Execute.run(new IngredientViewServiceImpl(), updateNo);
 						PrintIngredient.print(updateVO);
-						update: while (true) {
-							Out.sys("수정할 항목을 선택하세요.");
-							Out.sys("1. 설명  2. 가격  3. 재고  9. 취소  0. 수정완료");
-							switch (In.getStr("")) {
-							case "1":
-								updateVO.setDescription(In.getStr("설명"));
-								break;
-							case "2":
-								updateVO.setPrice(In.getInt("가격"));
-								break;
-							case "3":
-								updateVO.setQuantity(In.getInt("재고 추가량(감소는 음수로 입력)"));
-								break;
-							case "9":
-								Out.sysln("수정을 취소하고 이전으로 돌아갑니다.");
-								break update;
-							case "0":
-								if ((Integer) Execute.run(new IngredientUpdateServiceImpl(), updateVO) == 1) {
-									Out.sysln("상품정보가 정상적으로 수정되었습니다.");
-								} else
-									Out.sysln("상품정보가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
-								break update;
-							default:
-								Out.sys("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
+						if (updateVO != null) {
+							update: while (true) {
+								Out.sys("수정할 항목을 선택하세요.");
+								Out.sys("1. 설명  2. 가격  3. 재고  9. 취소  0. 수정완료");
+								switch (In.getStr("")) {
+								case "1":
+									updateVO.setDescription(In.getStr("설명"));
+									break;
+								case "2":
+									updateVO.setPrice(In.getInt("가격"));
+									break;
+								case "3":
+									updateVO.setQuantity(In.getInt("재고 추가량(감소는 음수로 입력)"));
+									break;
+								case "9":
+									Out.sysln("수정을 취소하고 이전으로 돌아갑니다.");
+									break update;
+								case "0":
+									if ((Integer) Execute.run(new IngredientUpdateServiceImpl(), updateVO) == 1) {
+										Out.sysln("상품정보가 정상적으로 수정되었습니다.");
+									} else
+										Out.sysln("상품정보가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+									break update;
+								default:
+									Out.sys("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
+								}
 							}
 						}
 						break;

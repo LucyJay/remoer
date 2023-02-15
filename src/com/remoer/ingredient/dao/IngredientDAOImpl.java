@@ -18,7 +18,7 @@ public class IngredientDAOImpl extends DAO implements IngredientDAO {
 			if (soldout)
 				sql = "SELECT no, name, price, quantity FROM ingredient WHERE quantity IS NOT NULL ORDER BY no";
 			else
-				sql = "SELECT no, name, price, quantity FROM ingredient WHERE quantity IS NOT NULL AND quantity != 0 ORDER BY no";
+				sql = "SELECT no, name, price, quantity FROM ingredient WHERE quantity IS NOT NULL AND quantity > 0 ORDER BY no";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -92,10 +92,25 @@ public class IngredientDAOImpl extends DAO implements IngredientDAO {
 	}
 
 	@Override
+	public Integer setQuantity(Long no) throws Exception {
+		try {
+			con = DB.getConnection();
+			String sql = "UPDATE ingredient SET quantity = 0 where no = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close();
+		}
+	}
+	@Override
 	public Integer update(IngredientVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE ingredient SET description = ?, price = ?, quantity = ? where no = ?";
+			String sql = "UPDATE ingredient SET description = ?, price = ?, quantity = quantity + ? where no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getDescription());
 			pstmt.setInt(2, vo.getPrice());
@@ -133,7 +148,7 @@ public class IngredientDAOImpl extends DAO implements IngredientDAO {
 	public Integer delete(Long no) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE ingredient SET quantity = NULL WHERE no = 1";
+			String sql = "UPDATE ingredient SET description =  NULL, price = null, quantity = NULL WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			return pstmt.executeUpdate();

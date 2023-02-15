@@ -165,8 +165,11 @@ public class OrderController {
 				}
 			}
 			vo.setList(goods);
-			if ((Integer) Execute.run(new OrderServiceImpl(), vo) == 1) {
+			Integer result = (Integer)Execute.run(new OrderServiceImpl(), vo);
+			if (result == 1) {
 				Out.sysln("상품이 정상적으로 주문되었습니다.");
+			} else if(result == -1) {
+				Out.sysln("재고가 부족하여 주문되지 않았습니다. 남은 수량을 확인하고 다시 시도해 주세요.");
 			} else
 				Out.sysln("상품이 정상적으로 주문되지 않았습니다. 다시 시도해 주세요.");
 			return;

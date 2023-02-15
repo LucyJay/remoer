@@ -16,7 +16,7 @@ public class PrintIngredient {
 		} else {
 			for (int i = 0; i < list.size(); i++) {
 				IngredientVO vo = list.get(i);
-				System.out.println(vo.getNo() + " | " + (vo.getQuantity() == 0 ? "[품절]" : "") + vo.getName() + " | "
+				System.out.println(vo.getNo() + " | " + (vo.getQuantity() <= 0 ? "[품절]" : "") + vo.getName() + " | "
 						+ vo.getPrice());
 			}
 		}

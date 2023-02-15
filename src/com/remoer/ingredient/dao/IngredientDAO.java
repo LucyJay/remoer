@@ -14,6 +14,7 @@ public interface IngredientDAO {
 
 	//등록, 수정
 		public Long checkIng(String name) throws Exception;
+		public Integer setQuantity(Long no) throws Exception;
 		public Integer update(IngredientVO vo) throws Exception;
 		public Integer write(IngredientVO vo) throws Exception;
 
