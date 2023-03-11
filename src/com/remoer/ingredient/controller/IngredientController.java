@@ -2,6 +2,7 @@ package com.remoer.ingredient.controller;
 
 import java.util.List;
 
+import com.remoer.cart.controller.CartController;
 import com.remoer.ingredient.io.PrintIngredient;
 import com.remoer.ingredient.service.IngredientDeleteServiceImpl;
 import com.remoer.ingredient.service.IngredientListServiceImpl;
@@ -69,17 +70,26 @@ public class IngredientController {
 									oc.order(oc.buy(viewVO));
 								} else {
 									Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
-									break view;
 								}
 								break view;
 							case "2":
 								if (Main.login != null) {
 									// 식재료 장바구니 담기
-
+									while (true) {
+										int quantity = In.getInt("담을 수량");
+										if (quantity > viewVO.getQuantity()) {
+											Out.sys("재고가 부족합니다. 다시 입력해 주세요.");
+											continue;
+										}
+										viewVO.setQuantity(quantity);
+										break;
+									}
+									CartController cc = new CartController();
+									cc.cart(viewVO);
 								} else {
 									Out.sysln("메인-회원관리 탭에서 로그인 후 이용할 수 있습니다..");
-									break view;
 								}
+								break view;
 							case "0":
 								Out.sysln("이전 메뉴로 돌아갑니다.");
 								break view;

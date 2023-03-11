@@ -44,7 +44,10 @@ public class GoodsVO {
 
 	@Override
 	public String toString() {
-		return "GoodsVO [goods_name=" + goods_name + ", quantity=" + quantity + ", price=" + price + "]";
+		return "GoodsVO [goods_no=" + goods_no + ", goods_name=" + goods_name + ", quantity=" + quantity + ", price="
+				+ price + "]";
 	}
+
+
 
 }

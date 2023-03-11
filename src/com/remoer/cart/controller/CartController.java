@@ -9,8 +9,10 @@ import com.remoer.cart.service.CartDeleteServiceImpl;
 import com.remoer.cart.service.CartListServiceImpl;
 import com.remoer.cart.service.CartUpdateQuantityServiceImpl;
 import com.remoer.cart.service.CartViewServiceImpl;
+import com.remoer.cart.service.CartWriteServiceImpl;
 import com.remoer.cart.vo.CartVO;
 import com.remoer.ingredient.vo.GoodsVO;
+import com.remoer.ingredient.vo.IngredientVO;
 import com.remoer.main.Execute;
 import com.remoer.main.In;
 import com.remoer.main.Main;
@@ -34,11 +36,13 @@ public class CartController {
 				case "2":
 					Out.sys("구매할 장바구니번호를 모두 선택한 후 0번을 눌러 주세요.");
 					List<GoodsVO> orderList = new ArrayList<>();
+					List<Long> orderNoList = new ArrayList<>();
 					order: while (true) {
 						Long orderNo = In.getLong("");
 						if (orderNo == 0L) {
 							break order;
 						} else {
+							orderNoList.add(orderNo);
 							CartVO orderVO = (CartVO) Execute.run(new CartViewServiceImpl(), orderNo);
 							if (orderVO == null) {
 								Out.sys("존재하지 않는 장바구니번호입니다.");
@@ -52,7 +56,11 @@ public class CartController {
 					if (orderList.size() < 1) {
 						Out.sysln("선택하신 상품이 없어 이전으로 돌아갑니다.");
 					} else {
-						new OrderController().order(orderList);
+						if (new OrderController().order(orderList)) {
+							for (Long no : orderNoList) {
+								Execute.run(new CartDeleteServiceImpl(), no);
+							}
+						}
 					}
 					break;
 				case "3":
@@ -69,7 +77,8 @@ public class CartController {
 								for (CartVO allVO : buyAllList) {
 									OrderController.buy(buyAllGoodsList, allVO);
 								}
-								new OrderController().order(buyAllGoodsList);
+								if (new OrderController().order(buyAllGoodsList))
+									Execute.run(new CartDeleteAllServiceImpl(), Main.login.getId());
 							}
 							break buyAll;
 						case "n":
@@ -133,6 +142,25 @@ public class CartController {
 				e.printStackTrace();
 				Out.err("오류가 발생했습니다.", "다시 시도해 주세요.", "문의: 관리자(admin@remoer.com)");
 			}
+		}
+	}
+
+	public boolean cart(IngredientVO ivo) {
+		try {
+			CartVO cvo = new CartVO();
+			cvo.setGoods_no(ivo.getNo());
+			cvo.setId(Main.login.getId());
+			cvo.setQuantity(ivo.getQuantity());
+			if ((boolean) Execute.run(new CartWriteServiceImpl(), cvo)) {
+				Out.sysln("성공적으로 장바구니에 담았습니다.");
+			} else {
+				Out.sysln("이미 장바구니에 있는 상품입니다.");
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			Out.err("오류가 발생했습니다.", "다시 시도해 주세요.", "문의: 관리자(admin@remoer.com)");
+			return false;
 		}
 	}
 }

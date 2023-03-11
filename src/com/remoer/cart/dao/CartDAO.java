@@ -16,4 +16,6 @@ public interface CartDAO {
 
 	public Integer deleteAll(String id) throws Exception;
 
+	public boolean write(CartVO vo) throws Exception;
+
 }

@@ -138,7 +138,7 @@ public class OrderController {
 
 	}
 
-	public void order(List<GoodsVO> goods) {
+	public boolean order(List<GoodsVO> goods) {
 		try {
 			OrderVO vo = new OrderVO();
 			vo.setId(Main.login.getId());
@@ -159,23 +159,28 @@ public class OrderController {
 
 				case "0":
 					Out.sysln("구매를 취소합니다.");
-					return;
+					return false;
 				default:
 					Out.sysln("잘못 누르셨습니다. 메뉴번호를 확인해 주세요.");
 				}
 			}
 			vo.setList(goods);
-			Integer result = (Integer)Execute.run(new OrderServiceImpl(), vo);
+			System.out.println(vo);
+			Integer result = (Integer) Execute.run(new OrderServiceImpl(), vo);
 			if (result == 1) {
 				Out.sysln("상품이 정상적으로 주문되었습니다.");
-			} else if(result == -1) {
-				Out.sysln("재고가 부족하여 주문되지 않았습니다. 남은 수량을 확인하고 다시 시도해 주세요.");
-			} else
+				return true;
+			} else if (result == -1) {
+				Out.sysln("재고가 부족하여 주문되지 않았습니다. 주문내역과 남은 수량을 확인하고 다시 시도해 주세요.");
+				return false;
+			} else {
 				Out.sysln("상품이 정상적으로 주문되지 않았습니다. 다시 시도해 주세요.");
-			return;
+				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			Out.err("주문 중 오류가 발생했습니다. 다시 시도해 주세요.");
+			return false;
 		}
 	}
 
@@ -190,7 +195,7 @@ public class OrderController {
 
 	public static List<GoodsVO> buy(List<GoodsVO> list, CartVO cvo) {
 		GoodsVO vo = new GoodsVO();
-		vo.setGoods_no(cvo.getNo());
+		vo.setGoods_no(cvo.getGoods_no());
 		vo.setQuantity(cvo.getQuantity());
 		list.add(vo);
 		return list;
