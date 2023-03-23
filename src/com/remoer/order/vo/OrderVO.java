@@ -8,10 +8,11 @@ public class OrderVO {
 	private Long no;
 	private String id, name, address, tel, status, order_date;
 	private String dlv_date = "-";
+	private Integer totalPrice;
 	private List<GoodsVO> list;
 
-	public Long totalPrice() {
-		Long total_price = 0L;
+	public Integer totalPrice() {
+		Integer total_price = 0;
 		if (list != null && list.size() > 0) {
 			for (GoodsVO vo : list) {
 				total_price += vo.totalPrice();
@@ -84,6 +85,14 @@ public class OrderVO {
 		this.dlv_date = dlv_date;
 	}
 
+	public Integer getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
 	public List<GoodsVO> getList() {
 		return list;
 	}
@@ -92,11 +101,5 @@ public class OrderVO {
 		this.list = list;
 	}
 
-	@Override
-	public String toString() {
-		return "OrderVO [no=" + no + ", id=" + id + ", name=" + name + ", address=" + address + ", tel=" + tel
-				+ ", status=" + status + ", order_date=" + order_date + ", dlv_date=" + dlv_date + ", list=" + list
-				+ "]";
-	}
-
+	
 }

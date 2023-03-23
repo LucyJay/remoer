@@ -18,6 +18,8 @@ public class PrintOrder {
 		} else {
 			for (int i = 0; i < list.size(); i++) {
 				OrderVO vo = list.get(i);
+				if(vo.getDlv_date()==null)
+					vo.setDlv_date("-");
 				System.out.println(vo.getNo() + " | " + (Main.isAdmin() ? (vo.getId() + " | ") : "") + vo.totalPrice()
 						+ " | " + vo.getOrder_date() + " | " + vo.getStatus() + " | " + vo.getDlv_date());
 			}

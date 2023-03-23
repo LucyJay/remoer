@@ -4,7 +4,7 @@ public class GoodsVO {
 
 	private Long goods_no;
 	private String goods_name;
-	private Integer quantity, price;
+	private Integer quantity, price, totalPrice;
 
 	public Integer totalPrice() {
 		return quantity * price;
@@ -42,12 +42,12 @@ public class GoodsVO {
 		this.price = price;
 	}
 
-	@Override
-	public String toString() {
-		return "GoodsVO [goods_no=" + goods_no + ", goods_name=" + goods_name + ", quantity=" + quantity + ", price="
-				+ price + "]";
+	public Integer getTotalPrice() {
+		return totalPrice;
 	}
 
-
+	public void setTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 
 }

@@ -15,12 +15,13 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 	public Integer order(OrderVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "INSERT INTO ord (no, id, name, address, tel) VALUES (ord_seq.nextval, ?, ?, ?, ?)";
+			String sql = "INSERT INTO ord (no, id, name, address, tel, totalPrice) VALUES (ord_seq.nextval, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getName());
 			pstmt.setString(3, vo.getAddress());
 			pstmt.setString(4, vo.getTel());
+			pstmt.setInt(5,  vo.getTotalPrice());
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,10 +104,10 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 			con = DB.getConnection();
 			String sql = "";
 			if (Main.isAdmin()) {
-				sql = "SELECT no, id, to_char(ord_date, 'yyyy-mm-dd') ord_date, status, to_char(delivery_date, 'yyyy-mm-dd') delivery_date FROM ord ORDER BY no desc";
+				sql = "SELECT no, id, to_char(ord_date, 'yyyy-mm-dd') ord_date, status, to_char(delivery_date, 'yyyy-mm-dd') delivery_date, totalPrice FROM ord ORDER BY no desc";
 				pstmt = con.prepareStatement(sql);
 			} else {
-				sql = "SELECT no, to_char(ord_date, 'yyyy-mm-dd') ord_date, status, to_char(delivery_date, 'yyyy-mm-dd') delivery_date FROM ord WHERE id = ? ORDER BY no desc";
+				sql = "SELECT no, to_char(ord_date, 'yyyy-mm-dd') ord_date, status, to_char(delivery_date, 'yyyy-mm-dd') delivery_date, totalPrice FROM ord WHERE id = ? ORDER BY no desc";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, id);
 			}
@@ -122,6 +123,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 				vo.setOrder_date(rs.getString("ord_date"));
 				vo.setStatus(rs.getString("status"));
 				vo.setDlv_date(rs.getString("delivery_date"));
+				vo.setTotalPrice(rs.getInt("totalPrice"));
 				list.add(vo);
 			}
 			return list;
@@ -138,7 +140,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 		try {
 			OrderVO vo = null;
 			con = DB.getConnection();
-			String sql = "SELECT no, id, name, address, tel, ord_date, status, delivery_date FROM ord WHERE no = ?";
+			String sql = "SELECT no, id, name, address, tel, ord_date, status, delivery_date, totalPrice FROM ord WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			rs = pstmt.executeQuery();
@@ -152,6 +154,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 				vo.setOrder_date(rs.getString(6));
 				vo.setStatus(rs.getString(7));
 				vo.setDlv_date(rs.getString(8));
+				vo.setTotalPrice(rs.getInt(9));
 
 				sql = "SELECT i.name, i.price, l.quantity FROM ord_list l, ingredient i WHERE l.ord_no = ? AND i.no = l.ingre_no";
 				pstmt = con.prepareStatement(sql);
@@ -162,6 +165,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 					gvo.setGoods_name(rs.getString(1));
 					gvo.setPrice(rs.getInt(2));
 					gvo.setQuantity(rs.getInt(3));
+					gvo.setTotalPrice(gvo.totalPrice());
 					vo.getList().add(gvo);
 				}
 			}

@@ -165,6 +165,7 @@ public class OrderController {
 				}
 			}
 			vo.setList(goods);
+			vo.setTotalPrice(vo.totalPrice());
 			System.out.println(vo);
 			Integer result = (Integer) Execute.run(new OrderServiceImpl(), vo);
 			if (result == 1) {
@@ -189,6 +190,7 @@ public class OrderController {
 		GoodsVO vo = new GoodsVO();
 		vo.setGoods_no(ivo.getNo());
 		vo.setQuantity(ivo.getQuantity());
+		vo.setPrice(ivo.getPrice());
 		list.add(vo);
 		return list;
 	}
@@ -197,6 +199,7 @@ public class OrderController {
 		GoodsVO vo = new GoodsVO();
 		vo.setGoods_no(cvo.getGoods_no());
 		vo.setQuantity(cvo.getQuantity());
+		vo.setPrice(cvo.getPrice());
 		list.add(vo);
 		return list;
 	}

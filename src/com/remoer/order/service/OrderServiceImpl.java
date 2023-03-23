@@ -14,6 +14,7 @@ public class OrderServiceImpl implements ServiceInterface {
 			if (dao.order(vo) == 1) {
 				Long no = dao.findOrderNo(vo.getId());
 				if (no != null) {
+					System.out.println(vo);
 					vo.setNo(dao.findOrderNo(vo.getId()));
 					return dao.orderGoods(vo);
 				}
