@@ -101,5 +101,11 @@ public class OrderVO {
 		this.list = list;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "OrderVO [no=" + no + ", id=" + id + ", name=" + name + ", address=" + address + ", tel=" + tel
+				+ ", status=" + status + ", order_date=" + order_date + ", dlv_date=" + dlv_date + ", totalPrice="
+				+ totalPrice + ", list=" + list + "]";
+	}
+
 }

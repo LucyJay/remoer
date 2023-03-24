@@ -181,7 +181,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 		LoginVO vo = null;
 		try {
 			con = DB.getConnection();
-			String sql = "SELECT m.id, m.nickname, m.name, to_char(m.birth, 'yyyy-mm-dd') birth, m.address, m.tel, m.email, to_char(m.reg_date, 'yyyy-mm-dd') reg_date, to_char(m.login_date, 'yyyy-mm-dd hh:mi:ss') login_date, m.status, m.grade, g.grade_name FROM member m, grade g WHERE id = ? AND m.grade = g.grade_no ";
+			String sql = "SELECT m.id, m.nickname, m.name, to_char(m.birth, 'yyyy-mm-dd') birth, m.address, m.tel, m.email, to_char(m.reg_date, 'yyyy-mm-dd') reg_date, to_char(m.login_date, 'yyyy-mm-dd hh24:mi:ss') login_date, m.status, m.grade, g.grade_name FROM member m, grade g WHERE id = ? AND m.grade = g.grade_no ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -288,7 +288,7 @@ public class MemberDAOImpl extends DAO implements MemberDAO {
 				sql = "SELECT m.id, m.nickname, m.name, to_char(m.birth, 'yymmdd') birth, g.grade_name, m.status FROM member m, grade g WHERE m.grade = g.grade_no ORDER BY m.id";
 				pstmt = con.prepareStatement(sql);
 			} else {
-				sql = "SELECT m.id, m.name, to_char(m.birth, 'yymmdd') birth, g.grade_name, m.status FROM member m, grade g WHERE m.status = ? AND m.grade = g.grade_no ORDER BY m.id";
+				sql = "SELECT m.id, m.nickname, m.name, to_char(m.birth, 'yymmdd') birth, g.grade_name, m.status FROM member m, grade g WHERE m.status = ? AND m.grade = g.grade_no ORDER BY m.id";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, type);
 			}

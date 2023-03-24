@@ -8,6 +8,7 @@ import com.remoer.main.Execute;
 import com.remoer.main.In;
 import com.remoer.main.Out;
 import com.remoer.notice.io.PrintNotice;
+import com.remoer.notice.service.NoticeDeleteServiceImpl;
 import com.remoer.notice.service.NoticeListServiceImpl;
 import com.remoer.notice.service.NoticeUpdateServiceImpl;
 import com.remoer.notice.service.NoticeViewServiceImpl;
@@ -120,10 +121,11 @@ public class NoticeController {
 					break;
 				case "5" :
 					Long deleteNo = In.getLong("삭제할 공지번호");
-					if ((Integer) Execute.run(new NoticeViewServiceImpl(), deleteNo) == 1)
+					if ((Integer) Execute.run(new NoticeDeleteServiceImpl(), deleteNo) == 1)
 						Out.sysln("공지사항이 정상적으로 삭제되었습니다.");
 					else
 						Out.sysln("공지사항이 정상적으로 삭제되지 않았습니다.");
+					break;
 				default:
 					Out.sysln("잘못 입력하셨습니다. 메뉴번호를 확인해 주세요.");
 

@@ -119,11 +119,12 @@ public class CartDAOImpl extends DAO implements CartDAO {
 	public boolean write(CartVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "INSERT INTO cart VALUES (cart_seq.NEXTVAL, ?, ?, ?, sysdate)";
+			String sql = "INSERT INTO cart VALUES (cart_seq.NEXTVAL, ?, ?, ?, ?, sysdate)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setLong(2, vo.getGoods_no());
 			pstmt.setInt(3, vo.getQuantity());
+			pstmt.setInt(4, vo.getPrice());
 			return (pstmt.executeUpdate() == 1) ? true : false;
 		} catch (Exception e) {
 			return false;

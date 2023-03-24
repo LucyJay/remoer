@@ -21,7 +21,7 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 			pstmt.setString(2, vo.getName());
 			pstmt.setString(3, vo.getAddress());
 			pstmt.setString(4, vo.getTel());
-			pstmt.setInt(5,  vo.getTotalPrice());
+			pstmt.setInt(5, vo.getTotalPrice());
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -161,6 +161,8 @@ public class OrderDAOImpl extends DAO implements OrderDAO {
 				pstmt.setLong(1, no);
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
+					if (vo.getList() == null)
+						vo.setList(new ArrayList<>());
 					GoodsVO gvo = new GoodsVO();
 					gvo.setGoods_name(rs.getString(1));
 					gvo.setPrice(rs.getInt(2));

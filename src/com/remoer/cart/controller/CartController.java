@@ -151,6 +151,7 @@ public class CartController {
 			cvo.setGoods_no(ivo.getNo());
 			cvo.setId(Main.login.getId());
 			cvo.setQuantity(ivo.getQuantity());
+			cvo.setPrice(ivo.getPrice());
 			if ((boolean) Execute.run(new CartWriteServiceImpl(), cvo)) {
 				Out.sysln("성공적으로 장바구니에 담았습니다.");
 			} else {

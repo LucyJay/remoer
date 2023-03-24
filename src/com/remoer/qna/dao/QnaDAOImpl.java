@@ -79,7 +79,7 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 		try {
 			QnaVO vo = null;
 			con = DB.getConnection();
-			String sql = "SELECT no, title, content, writer, to_char(write_date, 'yyyy-mm-dd hh:mi:ss') write_date, answer_title, answer_content, to_char(answer_date, 'yyyy-mm-dd hh:mi:ss') answer_date FROM qna WHERE no = ?";
+			String sql = "SELECT no, title, content, writer, to_char(write_date, 'yyyy-mm-dd hh24:mi:ss') write_date, answer_title, answer_content, to_char(answer_date, 'yyyy-mm-dd hh24:mi:ss') answer_date FROM qna WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			rs = pstmt.executeQuery();
@@ -110,12 +110,11 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 	public Integer writeQ(QnaVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "INSERT INTO qna (no, title, content, writer, write_date) VALUES (qna_seq.NEXTVAL, ?, ?, ?, ?)";
+			String sql = "INSERT INTO qna (no, title, content, writer) VALUES (qna_seq.NEXTVAL, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getQtitle());
 			pstmt.setString(2, vo.getQcontent());
 			pstmt.setString(3, vo.getWriter());
-			pstmt.setString(4, vo.getQwriteDate());
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -240,7 +239,7 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 	public Integer writeFaq(FaqVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "INSERT INTO faq (faq_seq.NEXTVAL, ?, ?, ?)";
+			String sql = "INSERT INTO faq VALUES (faq_seq.NEXTVAL, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());
@@ -258,7 +257,7 @@ public class QnaDAOImpl extends DAO implements QnaDAO {
 	public Integer updateFaq(FaqVO vo) throws Exception {
 		try {
 			con = DB.getConnection();
-			String sql = "UPDATE qna SET title = ?, content = ?, answer = ? WHERE no = ?";
+			String sql = "UPDATE faq SET title = ?, content = ?, answer = ? WHERE no = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());

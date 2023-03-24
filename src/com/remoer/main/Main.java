@@ -27,7 +27,7 @@ public class Main {
 		while (true) {
 			//테스트 완료: 레시피, 식재료마켓, 카트
 			// 추가할 기능: 북마크  // 테스트 : 주문배송부터 확인 필요 
-			String[][] menus = { { "공지사항/이벤트", "레시피나눔", "식재료마켓", "회원정보", "고객센터" }, { "주문/배송", "장바구니", "북마크" }, {} };
+			String[][] menus = { { "공지사항/이벤트", "레시피나눔", "식재료마켓", "회원정보", "고객센터" }, { "주문/배송", "장바구니"}, {} };
 			Out.menu("REMOER에 오신 것을 환영합니다", 3, "종료", menus);
 
 			switch (In.getStr("메뉴를 입력하세요")) {
@@ -54,10 +54,6 @@ public class Main {
 			case "7":
 				if (login != null) {
 					new CartController().execute();
-					break;
-				}
-			case "8":
-				if (login != null) {
 					break;
 				}
 			case "0":

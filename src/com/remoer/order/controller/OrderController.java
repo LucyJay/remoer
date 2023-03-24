@@ -70,9 +70,9 @@ public class OrderController {
 						Out.sysln("이미 배송이 시작되어 취소할 수 없습니다.");
 					} else {
 						if ((Integer) Execute.run(new OrderCancelServicelmpl(), cancelNo) == 1) {
-							Out.sysln("배송지가 정상적으로 수정되었습니다.");
+							Out.sysln("주문이 정상적으로 취소되었습니다.");
 						} else
-							Out.sysln("배송지가 정상적으로 수정되지 않았습니다. 다시 시도해 주세요.");
+							Out.sysln("주문이 정상적으로 취소되지 않았습니다. 다시 시도해 주세요.");
 					}
 					break;
 				case "0":
